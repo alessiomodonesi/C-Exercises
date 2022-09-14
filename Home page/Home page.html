@@ -1,0 +1,393 @@
+<!--Alessio Modonesi 4F-->
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+  <!-- Bootstrap CSS-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <title>I.I.S. Viola Marchesini Rovigo</title>
+  <link rel="stylesheet" href="Style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+</head>
+
+<body>
+  <!--Intestazione-->
+  <div class="container" id="intestazione">
+    <div class="row justify-content-xl-center">
+      <div class="d-none d-lg-block col-sm-3">
+        <img id="logoRepubblica" src="https://www.iisviolamarchesini.edu.it/j2/images/logo-repubblica-italiana.png"
+          alt="logo-repubblica-italiana">
+      </div>
+      <div class="col-sm-12 col-lg-6">
+        <h4 id="primaRigaIntestazione">ISTITUTO DI ISTRUZIONE SUPERIORE</h4>
+        <h3 id="secondaRigaIntestazione"><b>I.I.S. VIOLA-MARCHESINI</b></h3>
+        <h6 id="altroIntestazione">Via A. De Gasperi, 21 - 45100 - Rovigo - Tel. 0425/410699 - Fax 0425/35277 
+          <br>PEC: ROIS012001@pec.istruzione.it - Codice Meccanografico: ROIS012001<br>Codice Fiscale
+          80006050290</h6>
+      </div>
+      <div class="d-none d-lg-block col-sm-3">
+        <img id="certyQuality" src="https://www.iisviolamarchesini.edu.it/j2/images/certiquality.png" alt="CertiQuality">
+      </div>
+    </div>
+  </div>
+
+  <!--NavBar-->
+  <nav class="navbar navbar-expand-xl navbar-light" id="navbar">
+    <div class="container">
+      <!--Home button-->
+      <a class="navbar-brand" href="https://www.iisviolamarchesini.edu.it" id="tastoHome">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!--la Scuola-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              La Scuola
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Albo Online (fino A.S 2015-2016)</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Calendario Scolastico 2021-2022</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Cenni storici</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Codice disciplinare e di condotta</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Contatti</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Coordinate bancarie</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Consigli di Istituto</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Documenti</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Monitoraggio attività scolastiche</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Orario A.S 2021-2022</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Organigramma</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Piano attuale delle attività A.S. 2021-2022</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Plessi</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Politica della qualità</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">PTOF 2019-2022</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">PCTO</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Rapporto di Autovalutazione 2020-2022</a></li>
+            </ul>
+          </li>
+          <!--Genitori-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Genitori
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Modulistica</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Libri di testo</a></li>
+            </ul>
+          </li>
+          <!--Studenti-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Studenti
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Riforma</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Modulistica/studenti</a></li>
+            </ul>
+          </li>
+          <!--Docenti-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Docenti
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Modulistica</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Orario 2021</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Didattica a distanza</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Comunicazioni</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Verbali e materiale CdD</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Comitato di valutazione</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">BES Info</a></li>
+            </ul>
+          </li>
+          <!--Personale ATA-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Personale ATA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Modulistica ATA</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Amministrazione</a></li>
+            </ul>
+          </li>
+          <!--Orientamento-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Orientamento</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Orientamento in entrata</a></li>
+            </ul>
+          </li>
+          <!--ECDL-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              ECDL
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Certificazione ECDL classi prime</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Certificazione ECDL classi II, III, IV e V</a>
+              </li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Nuova ECDL</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">ECDL CAD 2D e 3D</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Calendario corsi ed esami</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Iscrizioni Esami</a></li>
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Area Riservata</a></li>
+            </ul>
+          </li>
+          <!--Cisco Academy-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Cisco Academy
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" id="dropdownBottone" href="#">Informazioni corso I.T. Essentials 5.0</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <!--Cerca-->
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
+          <button class="btn btn-outline-dark" disabled type="submit" id="cercaButton">Cerca</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!--Centrale-->
+  <div class="container" id="centrale">
+    <div class="row justify-content-center">
+
+      <!--Colonna sx-->
+      <div class="col-12 order-1 col-sm-6 order-sm-1 col-xl-3 order-xl-0" id="colonnaSx">
+        <!--Plessi-->
+        <div class="Container-colonne-esterne" id="plessi">
+          <h4>Plessi</h4>
+          <a href="https://www.iisviolamarchesini.edu.it">I.I.S. "Viola-Marchesini"</a><br>
+          <a href="http://www.agrariorovigo.it/">I.T.A. "O.Munerati"</a><br>
+          <a href="http://www.itsgberninirovigo.it/">I.T.G. "A.Bernini"</a><br>
+        </div>
+        <div class="Container-colonne-esterne" id="tecnici">
+          <h4>Indirizzi di studio Settore<br>Tecnico Tecnologico</h4>
+          <ul>
+            <a href="#">Biennio comune</a><br>
+            <a href="#">Chimica, Materiali e Biotecnologie</a><br>
+            <a href="#">Elettronica ed Elettrotecnica </a><br>
+            <a href="#">Informatica e Telecomunicazioni</a><br>
+            <a href="#">Meccanica, Meccatronica ed Energia</a><br>
+            <a href="#">Sistema Moda</a><br>
+            <a href="#">Istruzione degli Adulti</a><br>
+            <a href="#">Agraria, Agroalimentare e Agroindustria (sede Munerati)</a><br>
+            <a href="#">Costruzioni,Ambiente e Territorio<br>(sede Bernini)</a><br>
+          </ul>
+        </div>
+        <!--Indirizzi professionali-->
+        <div class="Container-colonne-esterne" id="professionali">
+          <h4>Indirizzi di studio<br>Settore Professionale</h4>
+          <ul>
+            <a href="#">Apparati, impianti e servizi<br>tecnici, industriali e civili</a><br>
+            <a href="#">Manutenzione mezzi di trasporto</a>
+          </ul>
+        </div>
+        <!--PON FSE Studenti-->
+        <div class="Container-colonne-esterne" id="ponFse">
+          <h4>PON FSE Studenti</h4>
+          <img id="ponStudenti" src="https://www.iisviolamarchesini.edu.it/j2/images/pon_studenti.png" alt="Pon">
+        </div>
+      </div>
+
+      <!--Colonna centro-->
+      <div class="col-12 order-0 col-sm-12 order-sm-0 col-xl-6 order-xl-1" id="colonnaCentrale">
+        <div class="Container-colonne-esterne" id="titoloCentro">
+          <h3 id="primaRigaTitolo">Risorse per Didattica Digitale Integrata</h3>
+          <a href="#">Risorse utili per la Didattica Digitale Integrata</a>
+        </div>
+        <div class="Notizie">
+          <br><div>
+            <h4>In Evidenza</h4>
+            <h5>Elenco alunni classi prime e terze AS 2021-2022</h5>
+            <p id="testoCentroPagina">Si pubblicano gli elenchi delle studentesse e degli studenti delle <b
+                class="keywords">classi prime e terze di tutti i plessi</b> per l'A.S. 2021-2022.<br>
+              <a href="#">Elenchi classi prime</a><br>
+              <a href="#">Elenchi classi terze</a>
+            </p>
+            <h5>Corso serale Istruzione degli Adulti A.S. 2021-2022</h5>
+            <p id="testoCentroPagina">Si comunica che presso il nostro Istituto <b class="keywords">è possibile
+                iscriversi ai corsi per adulti IdA di secondo livello</b> finalizzati al conseguimento del diploma di
+              istruzione tecnica per l’A.S. 2021/2022, inoltrando la domanda di iscrizione on-line.<br>
+              Ci si può iscrivere al:</p>
+            <ul>
+              <li id="elenco"><b class="keywords">primo periodo didattico</b>: primo e secondo anno (Biennio
+                comune)</li>
+              <li id="elenco"><b class="keywords">secondo periodo didattico</b>: terzo e quarto anno (Meccanica,
+                Informatica e Sistema Moda)</li>
+              <li id="elenco"><b class="keywords">terzo periodo didattico</b>: quinto anno (Meccanica, Informatica
+                e Sistema Moda)</li>
+            </ul>
+            <p id="testoCentroPagina"><a href="#">Per maggiori informazioni scarica l'allegato</a><br><a href="#">Modulo
+                di iscrizione online</a><br><a href="#">Scarica la locandina 1</a><br><a href="#">Scarica la locandina
+                2</a></p>
+            <h5>Collegio dei Docenti</h5>
+            <p id="testoCentroPagina">Il Collegio dei Docenti dell’IIS “Viola-Marchesini” è convocato in modalità <b
+                class="keywords">a distanza mercoledì 8 settembre 2021 alle ore 9.30.</b></p>
+            <h5>Calendario esami integrativi A.S. 2021-2022</h5>
+            <p id="testoCentroPagina">Si pubblica il calendario degli esami integrativi per passaggi da altri
+              istituti.<br><a href="#">Scarica l'allegato</a></p>
+            <h5>Elenchi classi A.S 2021-2022</h5>
+            <p id="testoCentroPagina">Gli elenchi delle classi per l'A.S. 2021-2022 <b class="keywords">saranno
+                pubblicati a partire da settembre.</b></p>
+            <h5>Differimento data apertura buste dell’avviso pubblico aperto/invito rivolto alle
+              agenzie di assicurazione</h5>
+            <p id="testoCentroPagina"><b class="keywords">Differimento data apertura buste</b> dell’avviso pubblico
+              aperto/invito, alla presentazione di offerte rivolto alle agenzie di assicurazione per presentazione delle
+              offerte per l’affidamento del servizio di <b class="keywords">assicurazione in favore degli alunni e del
+                personale scolastico.</b><br><a href="#">Vedi comunicazione</a></p>
+            <h5>Avviso pubblico aperto/invito rivolto alle agenzie di assicurazione</h5>
+            <p id="testoCentroPagina">Avviso pubblico aperto/invito, alla presentazione di offerte rivolto alle agenzie
+              di assicurazione per <b class="keywords">presentazione delle offerte per l’affidamento del servizio di
+                assicurazione in favore degli alunni e del personale scolastico per gli anni 2021/2022, 2022/2023,
+                2023/2024, con decorrenza dalle 00.00 del 01/09/2021 alle 24.00 del 31/08/2024.</b><br><a
+                href="#">Scarica l'avviso e gli allegati</a></p>
+            <h5>Perfezionamento Iscrizioni Classi Prime A.S. 2021-2022</h5>
+            <p id="testoCentroPagina">Sono pubblicate le indicazioni <b class="keywords">per perfezionare l'iscrizione
+                alle classi prime per l'A.S. 2021-2022.<br>
+                Nota:</b> a causa del cambio dell'ISTITUTO CASSIERE i pagamenti del contributo volontario con PAGO IN
+              RETE per le CLASSI PRIME A.S. 2021-2022 potranno essere effettuati dall'11 Luglio.</p>
+            <p id="testoCentroPagina"><a href="#">Scarica la comunicazione</a><br><a href="#">Scarica il manuale utenti
+                pagamenti scolastici Pago in Rete</a></p>
+            <h5>Libri di testo A.S. 2021-2022</h5>
+            <p id="testoCentroPagina">Sono pubblicati i <b class="keywords">libri di testo per l'A.S. 2021-2022</b> per
+              tutti i quattro plessi.<br><a href="#">Scarica la lista dei libri di testo 2021-2022 </a></p>
+            <h5>Prove di recupero per gli studenti con sospensione del giudizio</h5>
+            <p id="testoCentroPagina">Si comunicano le giornate in cui si svolgeranno le <b class="keywords">Prove di
+                recupero per gli studenti con sospensione del giudizio:</b></p>
+            <ul>
+              <li id="elenco"><b class="keywords">25 agosto</b>: Prove di Matematica, Fisica, Scienze della Terra e
+                Biologia, Tecnologie Informatiche (classi 1^ IT), Chimica Biennio, TTRG (Biennio);</li>
+              <li id="elenco"><b class="keywords">26 agosto</b>: Prove di Inglese, Diritto, Geografia, Genio
+                rurale, Produzioni Vegetali, Biotecnologie agrarie, Trasformazione dei Prodotti, Economia Estimo
+                Marketing e Legislazione, Tecnologie Elettrico Elettroniche (IPIA);</li>
+              <li id="elenco"><b class="keywords">27 agosto</b>: Prove di Italiano, Storia, Chimica Organica,
+                Chimica Analitica, Tecnologie Chimiche Industriali, Topografia, Progettazione Costruzione Impianti,
+                Tecnologie Progettazioni Sistemi Informatici, Telecomunicazioni, Elettrotecnica ed Elettronica,
+                Meccanica Macchine ed energia, Sistemi e Automazione, Tecnologie Meccaniche, Disegno Progettazione
+                Organizzazione industriale, Tecnologie e Progettazioni di sistemi elettrici ed elettronici.</li>
+            </ul>
+            <p id="testoCentroPagina">Gli orari specifici delle Prove verranno comunicati i primi di luglio.<br>
+              Si informa altresì che il <b class="keywords">23 e 24 agosto 2021</b> verrà effettuata una ripresa dei
+              Corsi di recupero, in vista delle prove.</p>
+          </div>
+        </div>
+      </div>
+
+      <!--Colonna dx-->
+      <div class="col-12 order-2 col-sm-6 order-sm-2 col-xl-3 order-xl-2" id="colonnaDx">
+        <!--PON 2014-2020-->
+        <div class="Container-colonne-esterne" id="PON">
+          <h4>PON 2014-2020</h4>
+          <img id="logoPon" src="https://www.iisviolamarchesini.edu.it/j2/images/logo_nuovo_pon.png" alt="PON 2014-2020">
+        </div>
+        <!--SICUREZZA E COVID-->
+        <div class="Container-colonne-esterne" id="covid">
+          <br><a href="#">SICUREZZA E COVID</a><br>
+          <img id="corsoSicurezza" src="https://www.iisviolamarchesini.edu.it/j2/images/facial_mask.png" alt="CorsoSicurezza">
+        </div>
+        <!--Tour Virtuale-->
+        <div class="Container-colonne-esterne" id="tour">
+          <br><h4>Tour Virtuale</h4>
+          <a href="https://tourmake.it/Viola-Marchesini">
+            <img  id="googleStreet" src="https://www.iisviolamarchesini.edu.it/j2/images/google_street.png" alt="TourVirtuale"></a>
+          <p>Fai un tour virtuale <br>dell'IIS Viola-Marchesini</p>
+        </div>
+        <!--La Scuola Online-->
+        <div class="Container-colonne-esterne" id="scuolaOnline">
+          <br><h4>La Scuola Online</h4>
+          <a href="https://web.spaggiari.eu/home/app/default/login.php?custcode=ROIT0003">
+            <img src="https://www.iisviolamarchesini.edu.it/j2/images/classeviva.jpg" alt="RegistroElettronico"
+            id="immagini"></a>
+          <br><img src="https://www.iisviolamarchesini.edu.it/j2/images/albo_online.png" alt="Albo"
+            id="immagini"><br>
+          <a href="#">Atti pubblicati fino<br>all'11/07/2016</a>
+          <br><img src="https://www.iisviolamarchesini.edu.it/j2/images/trasparenza.png" alt="AmministrazioneTrasparente"
+            id="immagini">
+            <br><img src="https://www.iisviolamarchesini.edu.it/j2/images/comunicati.png" alt="Comunicati"
+            id="immagini">
+            <br><img src="https://www.iisviolamarchesini.edu.it/j2/images/set.png" alt="ScuolaETerritorio"
+            id="immagini"><br>
+          <a href="#">Candida la tua azienda</a><br>
+          <a href="#">Report azienda attività</a>
+        </div>
+        <!--Moodle-->
+        <div class="Container-colonne-esterne" id="moodle">
+          <br><img id="moodleBionet" src="https://www.iisviolamarchesini.edu.it/j2/images/moodle_2.png" alt="Moodle">
+        </div>
+        <!--Bionet-->
+        <div class="Container-colonne-esterne" id="bionet">
+          <img id="moodleBionet" src="https://www.iisviolamarchesini.edu.it/j2/images/bionet.png" alt="Bionet">
+        </div>
+      </div>
+    </div>
+
+    <!--Privacy-->
+    <div id="privacy">
+      <a href="https://www.iubenda.com/privacy-policy/13286193"><button type="button"><b class="keywords">Privacy Police</b></button></a>
+      <a href="https://www.iubenda.com/privacy-policy/13286193/cookie-policy"><button type="button"><b class="keywords">Cookie Police</b></button></a>
+    </div>
+
+    <!--Piè di pagina-->
+    <div id="pièDiPagina">
+      <h7>IIS VIOLA-MARCHESINI Via A. De Gasperi, 21 Rovigo - Centralino Tel. 0425/410699 Fax 0425/35277<br>
+      Email: rois012001@istruzione. Posta Elettronica Certificata rois012001@pec.istruzione.it<br>
+      Powered by Twitter Bootstrap - Designed by Alessio Modonesi</h7>
+    </div>
+  </div>
+  
+  <!--Pop-up cookie-->
+  <div class="modal fade" id="cookieModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Informativa</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Questo sito o gli strumenti terzi da questo utilizzati si avvalgono di cookie necessari al funzionamento ed
+          utili alle finalità illustrate nella cookie policy. Se vuoi saperne di più o negare il consenso a tutti o ad
+          alcuni cookie, consulta la <a href="https://www.iubenda.com/privacy-policy/13286193/cookie-policy">cookie
+          policy</a>.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Accetta e chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Script-->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+    integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+    crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+</html>

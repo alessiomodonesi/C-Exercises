@@ -1,0 +1,244 @@
+/*Alessio Modonesi 4F*/
+#logoRepubblica{
+    width: 180px;
+    float: left;
+    margin-top: 18px;
+    margin-left: 20px;
+}
+
+#intestazione{
+    background: rgb(2,0,36);
+    background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(9,9,121,0.5973739837731968) 54%, rgba(0,203,249,1) 91%, rgba(0,212,255,1) 94%);
+    text-align: center;
+    padding: 4px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+#primaRigaIntestazione{
+    letter-spacing: 2px;
+    line-height: 20px;
+    color: white;
+}
+
+#secondaRigaIntestazione{
+    letter-spacing: 1px;
+    line-height: 28px;
+    color: white;
+}
+
+#altroIntestazione{
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#certyQuality{
+    width: 125px;
+    float: right;
+}
+
+#navbar{
+    background: #2A43D3;
+    background: linear-gradient(to bottom right, #2A43D3, #B6C3DB);
+    margin: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#tastoHome{
+    background-color: transparent;
+    color: black;
+    border-radius: 5px;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+#navbarSupportedContent{
+    text-align: center;
+    margin: 5px 10px;
+}
+
+#navbarDropdown{
+    color:black;
+}
+
+#dropdownBottone {
+    background-color: white;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#cercaButton{
+    font-size: 15px;
+    margin-left: 3px;
+    background-color: transparents;
+    color: black;
+}
+
+#centrale{
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    text-align: center;
+    padding: 4px;
+    background-color: white;
+}
+
+#colonneSx{
+    font-size: 17px;
+    font-family: 'Rubik', sans-serif;
+    text-align: left;
+}
+
+#plessi{
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+#tecnici{
+    margin-top: 15px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+#professionali{
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+#ponFse{
+    border-radius: 5px;
+    background-color: whitesmoke;
+    text-align: center;
+}
+
+#ponStudenti{
+    width: 130px;
+    text-align:center;
+}
+
+#colonnaCentrale{
+    margin-top: 10px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    font-size: 17px;
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+    
+}
+
+#titoloCentro{
+    color: black;
+    font-family: 'Rubik', sans-serif;
+}
+
+#primaRigaTitolo{
+    margin-top: 15px;
+}
+
+.Notizie{
+    font-family:'Assistant', sans-serif;
+    margin: 10px 10px;
+    width: auto;
+}
+
+#testoCentroPagina{
+    font-size: 17px;
+    font-family:'Assistant', sans-serif;
+    color: black;
+}
+
+#elenco{
+    font-size: 17px;
+    font-family:'Assistant', sans-serif;
+    color: black;
+    margin-bottom: 3px;
+}
+
+#colonneDx{
+    font-size: 17px;
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+}
+
+#PON{
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+#logoPon{
+    width: 135px;
+    text-align:center;
+}
+
+#covid{
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+#corsoSicurezza{
+    width: 135px;
+    text-align:center;
+    margin-top: 10px;
+}
+
+#tour{
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke; 
+}
+
+#googleStreet{
+    width: 125px;
+}
+
+#scuolaOnline{
+    border-radius: 5px;
+    text-align: center;
+    background-color: whitesmoke;  
+}
+
+#moodle{
+    background-color: whitesmoke; 
+}
+
+#bionet{
+    background-color: whitesmoke; 
+}
+
+#immagini{
+    width: 125px;
+    margin-top: 10px;
+    text-align:center; 
+    background-color: whitesmoke; 
+}
+
+#moodleBionet{
+    width: 125px; 
+    text-align: center;
+}
+
+#privacy{
+    margin-top: 15px;
+    background-color: white; 
+    font-size: 12px; 
+    border-radius: 5px;
+}
+
+#pièDiPagina{
+    margin-top: 20px;
+    text-align: center;
+    color: black;
+}
