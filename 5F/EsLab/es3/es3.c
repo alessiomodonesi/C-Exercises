@@ -133,7 +133,7 @@ int main()
 
     do
     {
-        printf("\n\nScegli un giochino:\
+        printf("\n\nScegli un'azione:\
         \n'1' per stampa\
         \n'2' per stampa inversa\
         \n'3' per somma/media\
