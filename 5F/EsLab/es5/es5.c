@@ -10,54 +10,58 @@ Dovrà avere le seguenti funzionalità:
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define SIZE 10
-
-int *Inserisci(int array[])
+int Inserisci(int array[], int size)
 {
-    int num;
-    for (int i = 0; i < SIZE; i++)
-    {
-        printf("Inserisci un numero: ");
-        scanf("%d", &num);
-        array[i] = num;
-    }
-    return array;
+    array = realloc(array, (size + 1) * sizeof(int));
+    printf("Inserisci un numero: ");
+    scanf("%d", &array[size + 1]);
+    return size + 1;
 }
 
-int *Verifica(int array[])
+int Verifica(int array[], int size)
 {
-    if (sizeof(array) != SIZE)
+    int trova = 0;
+    printf("\nDigita numero da cercare: ");
+    scanf("%d", &trova);
+
+    for (int i = 0; i <= size; i++)
     {
+        if (array[i] == trova)
+        {
+            printf("Numero trovato in posizione: %d ", array[i]);
+            break;
+        }
     }
-    return array;
+    return size + 1;
 }
 
-int *Elimina(int array[])
+int Elimina(int array[], int size)
 {
     int elimina = 0, tmp;
     printf("\nDigita numero da eliminare: ");
     scanf("%d", &elimina);
 
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i <= size; i++)
     {
         if (array[i] == elimina)
         {
             tmp = array[i];
-            array[i] = array[SIZE - 1];
-            array[SIZE - 1] = tmp;
+            array[i] = array[size - 1];
+            array[size - 1] = tmp;
             printf("Numero eliminato\n");
             break;
         }
     }
-    return array;
+    return size + 1;
 }
 
-int *Ordina(int array[])
+int Ordina(int array[], int size)
 {
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i <= size; i++)
     {
-        for (int j = (i + 1); j < SIZE; j++)
+        for (int j = (i + 1); j < size; j++)
         {
             if (array[i] > array[j])
             {
@@ -67,19 +71,19 @@ int *Ordina(int array[])
             }
         }
     }
-    return array;
+    return size + 1;
 }
 
-void Stampa(int array[])
+void Stampa(int array[], int size)
 {
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i <= size; i++)
         printf("| %d | ", array[i]);
 }
 
 int main()
 {
-    int array[SIZE];
-    int scelta = 0, esci = 0;
+    int *array = malloc(sizeof(int));
+    int size = 0, scelta = 0, esci = 0;
 
     do
     {
@@ -98,20 +102,20 @@ int main()
             esci = 1;
             break;
         case 1:
-            Inserisci(array);
-            Stampa(array);
+            Inserisci(array, size);
+            Stampa(array, size);
             break;
         case 2:
-            Verifica(array);
-            Stampa(array);
+            Verifica(array, size);
+            Stampa(array, size);
             break;
         case 3:
-            Elimina(array);
-            Stampa(array);
+            Elimina(array, size);
+            Stampa(array, size);
             break;
         case 4:
-            Ordina(array);
-            Stampa(array);
+            Ordina(array, size);
+            Stampa(array, size);
             break;
         }
     } while (esci == 0);
