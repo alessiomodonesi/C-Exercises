@@ -1,23 +1,16 @@
-// Alessio Modonesi
-/*
-Realizzare "array auto-incrementante" di interi, che sia sempre pieno.
-Dovrà avere le seguenti funzionalità:
-- inserisci numero
-- verifica numero
-- elimina numero
-- ordina
-*/
+// Alessio Modonesi 5F
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int Inserisci(int array[], int size)
 {
     array = realloc(array, (size + 1) * sizeof(int));
-    printf("Inserisci un numero: ");
+
+    printf("\nInserisci un numero: ");
     scanf("%d", &array[size + 1]);
-    return size + 1;
+
+    return (size + 1);
 }
 
 int Verifica(int array[], int size)
@@ -26,42 +19,37 @@ int Verifica(int array[], int size)
     printf("\nDigita numero da cercare: ");
     scanf("%d", &trova);
 
-    for (int i = 0; i <= size; i++)
+    for (int i = 1; i <= size; i++)
     {
         if (array[i] == trova)
-        {
-            printf("Numero trovato in posizione: %d ", array[i]);
-            break;
-        }
+            return (i - 1);
     }
-    return size + 1;
+
+    return -1;
 }
 
 int Elimina(int array[], int size)
 {
-    int elimina = 0, tmp;
+    int elimina, var = 0;
     printf("\nDigita numero da eliminare: ");
     scanf("%d", &elimina);
 
-    for (int i = 0; i <= size; i++)
+    for (int i = 1; i <= size; i++)
     {
-        if (array[i] == elimina)
+        if (elimina != array[i])
         {
-            tmp = array[i];
-            array[i] = array[size - 1];
-            array[size - 1] = tmp;
-            printf("Numero eliminato\n");
-            break;
+            array[var++] = array[i];
         }
     }
-    return size + 1;
+
+    return (var - 1);
 }
 
-int Ordina(int array[], int size)
+void Ordina(int array[], int size)
 {
-    for (int i = 0; i <= size; i++)
+    for (int i = 1; i <= size; i++)
     {
-        for (int j = (i + 1); j < size; j++)
+        for (int j = (i + 1); j <= size; j++)
         {
             if (array[i] > array[j])
             {
@@ -71,23 +59,25 @@ int Ordina(int array[], int size)
             }
         }
     }
-    return size + 1;
+    printf("\n");
 }
 
 void Stampa(int array[], int size)
 {
-    for (int i = 0; i <= size; i++)
-        printf("| %d | ", array[i]);
+    printf("array: ");
+    for (int i = 1; i <= size; i++)
+        printf("%d ", array[i]);
+    printf("\n\n");
 }
 
 int main()
 {
     int *array = malloc(sizeof(int));
-    int size = 0, scelta = 0, esci = 0;
+    int size = 0, pos = 0, scelta = 0;
 
     do
     {
-        printf("\nScegli:\
+        printf("Scegli:\
         \n'1' -> Inserisci\
         \n'2' -> Verifica\
         \n'3' -> Elimina\
@@ -99,18 +89,18 @@ int main()
         switch (scelta)
         {
         case 0:
-            esci = 1;
             break;
         case 1:
-            Inserisci(array, size);
+            size = Inserisci(array, size);
             Stampa(array, size);
             break;
         case 2:
-            Verifica(array, size);
+            pos = Verifica(array, size);
+            printf("Numero trovato in posizione: %d\n", pos);
             Stampa(array, size);
             break;
         case 3:
-            Elimina(array, size);
+            size = Elimina(array, size);
             Stampa(array, size);
             break;
         case 4:
@@ -118,7 +108,7 @@ int main()
             Stampa(array, size);
             break;
         }
-    } while (esci == 0);
+    } while (scelta != 0);
 
-    return 0;
+    free(array);
 }
