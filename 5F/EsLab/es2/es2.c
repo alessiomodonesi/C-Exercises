@@ -11,16 +11,17 @@ int main()
     int somma = 0;
 
     printf("\nInserisci una parola: ");
-    scanf("%[^\n]%*c", str); // legge fino a quando non trova \n
-    printf("Calcolo in corso di '%s'\n", str);
+    scanf("%s", str);
 
     for (int i = 0; i < strlen(str); i++)
         somma += str[i];
 
-    printf("\nascii: %d", somma);
+    printf("\nTotale: %d", somma);
+
     if (somma >= 2000)
-        printf("\nascii >= 2000");
+        printf("\nAscii value >= 2000");
     else
-        printf("\nascii < 2000");
+        printf("\nAscii value < 2000");
+
     return 0;
 }
