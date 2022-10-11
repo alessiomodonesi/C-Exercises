@@ -12,10 +12,9 @@ int main()
     char stringa[50];
     for (int i = 0; i < 50; i++)
     {
-        char c = rand() % 128;
+        char c = 32 + rand() % 95;
         if (strchr(stringa, c) == NULL || i == 0)
             stringa[i] = c;
-
         else
             i--;
     }
