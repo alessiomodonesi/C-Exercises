@@ -10,10 +10,12 @@
 
 void Sort(char *string)
 {
-    int j = 0, k = 0;
-    char str[SIZE];
-    char num[SIZE];
-    char sc[SIZE];
+    int s = 0;
+    char str[SIZE + 1];
+    int n = 0;
+    char num[SIZE + 1];
+    int p = 0;
+    char special[SIZE + 1];
 
     for (int i = 0; i < strlen(string); i++)
     {
@@ -26,9 +28,9 @@ void Sort(char *string)
                     int c = string[i];
                     string[i] = string[j];
                     string[j] = c;
-                    str[i] = c;
                 }
             }
+            str[s++] = string[i];
         }
         else if (isalpha(string[i]) == 2) // lettera minuscola
         {
@@ -39,36 +41,67 @@ void Sort(char *string)
                     int c = string[i];
                     string[i] = string[j];
                     string[j] = c;
-                    str[i] = c;
                 }
             }
+            str[s++] = string[i];
         }
         else if (isdigit(string[i]) == 1) // numero
         {
-            num[j] = string[i];
-            j++;
+            num[n++] = string[i];
         }
         else if (isalpha(string[i]) == 0) // carattere speciale
         {
-            sc[k] = string[i];
-            k++;
+            special[p++] = string[i];
         }
+        else
+            printf("Char non riconosciuto");
     }
 
-    if (j > 0)
-        string = strcat(str, num);
-    if (k > 0)
-        string = strcat(str, sc);
+    int size = strlen(str);
+    str[size] = '\0';
+
+    size = strlen(num);
+    num[size] = '\0';
+
+    size = strlen(special);
+    special[size] = '\0';
+
+    for (int i = 0; i < strlen(str); i++)
+        printf("%c", str[i]);
+
+    if (n > 0 && p > 0)
+    {
+        for (int i = 0; i < strlen(num); i++)
+            putchar(num[i]);
+
+        for (int j = 0; j < strlen(special); j++)
+            putchar(special[j]);
+    }
+    else if (n > 0)
+    {
+        for (int i = 0; i < strlen(num); i++)
+            putchar(num[i]);
+    }
+    else if (p > 0)
+    {
+        for (int i = 0; i < strlen(special); i++)
+            putchar(special[i]);
+    }
+
+    printf("\n");
 }
 
 int main()
 {
     char string[SIZE];
+    while (1)
+    {
+        printf("Inserisci una stringa o 'esci' per uscire: ");
+        scanf("%s", string);
 
-    printf("\nInserisci la tua string: ");
-    scanf("%s", string);
-
-    Sort(string);
-    printf("\nSorted string: %s", string);
-    printf("\n\n");
+        if (strcmp(string, "esci") != 0)
+            Sort(string);
+        else
+            return 0;
+    }
 }
