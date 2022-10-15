@@ -74,21 +74,18 @@ int Count(int *arr, int i)
     return cont;
 }
 
-int Delete(int *arr, int delete)
+void Delete(int *arr, int canc, int size)
 {
-    int nDelete = 0;
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < size; i++)
     {
-        if (arr[i] == delete)
+        if (arr[i] == canc)
         {
-            nDelete++;
-            do
-            {
-                arr[i] = NUM(MIN, MAX);
-            } while (arr[i] != delete);
+            printf("Sto eliminando il numero: %d\n", arr[i]);
+            int tmp = arr[i];
+            arr[i] = arr[size - 1];
+            arr[size - 1] = tmp;
         }
     }
-    return nDelete;
 }
 
 /*void BuildPari(int *arr, int dim)
@@ -129,25 +126,36 @@ int Delete(int *arr, int delete)
 
 int main()
 {
-    int array[SIZE];
-    int nDel = 0, fr = 0;
+    int fr = 0, size = SIZE;
+    int array[size];
+    int delete[SIZE];
     srand(time(NULL));
 
     Generation(array);
-    Sort(array, sizeof(array) / sizeof(int), 0);
-    Print(array, sizeof(array) / sizeof(int));
+    Sort(array, size, 0);
+    Print(array, size);
 
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < size; i++)
     {
         fr = Count(array, i);
         if (fr > 1)
         {
             printf("\nIl numero '%d' compare '%d' volte", array[i], fr);
-            nDel = Delete(array, array[i]);
+            delete[i] = array[i];
+            i += fr - 1;
         }
     }
-    printf("\n\n");
-    Print(array, (sizeof(array) / sizeof(int)) - nDel);
+
+    printf("\nDelete\n");
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("%d", delete[i]);
+        // Delete(array, delete[i], size);
+        // size--;
+    }
+    // Sort(array, size, 0);
+    // printf("\n\n");
+    // Print(array, size);
 
     // BuildPari(array, (sizeof(array) / sizeof(int)) - nDel);
     // BuildDispari(array, (sizeof(array) / sizeof(int)) - nDel);
