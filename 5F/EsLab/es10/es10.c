@@ -133,7 +133,8 @@ int main()
 {
     srand(time(NULL));
     int size1 = SIZE, size2 = NDEL;
-    int array[size1], *delete = malloc(sizeof(int) * size2);
+    int *array = malloc(sizeof(int) * size1);
+    int *delete = malloc(sizeof(int) * size2);
     int d = 0, fr = 0;
 
     Generation(array);
