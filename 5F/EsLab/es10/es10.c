@@ -10,6 +10,7 @@ decrescente.*/
 #include <time.h>
 
 #define SIZE 10
+#define NDEL 0
 #define MIN 0
 #define MAX 9
 #define NUM(min, max) ((rand() % (int)(((max) + 1) - (min))) + (min))
@@ -80,83 +81,111 @@ void Delete(int *arr, int canc, int size)
     {
         if (arr[i] == canc)
         {
-            printf("Sto eliminando il numero: %d\n", arr[i]);
+            // printf("Sto eliminando il numero: %d\n", arr[i]);
             int tmp = arr[i];
             arr[i] = arr[size - 1];
             arr[size - 1] = tmp;
+            break;
         }
     }
 }
 
-/*void BuildPari(int *arr, int dim)
+void BuildPari(int *arr, int dim)
 {
-    int pari[dim], num = 0, k = 0;
+    int num = 0, p = 0;
     for (int i = 0; i < dim; i++)
     {
         if (arr[i] % 2 == 0)
-        {
-            pari[k] = num;
-            k++;
-        }
+            num++;
     }
-    Sort(pari, k, 1);
+
+    int *pari = malloc(sizeof(int) * num + 1);
+    printf("\npari: %d, ", num);
+    printf("dim: %lu\n", sizeof(pari) / sizeof(int));
+
+    for (int i = 0; i < num; i++)
+    {
+        if (arr[i] % 2 == 0)
+            pari[p++] = num;
+    }
+    Sort(pari, num, 1);
 
     printf("\nPari\n");
-    for (int i = 0; i < dim; i++)
+    for (int i = 0; i < num; i++)
         printf("[%d]: %d\n", i, pari[i]);
-}*/
+}
 
-/*void BuildDispari(int *arr, int dim)
+void BuildDispari(int *arr, int dim)
 {
-    int dispari[dim], num = 0, k = 0;
+    int num = 0, d = 0;
     for (int i = 0; i < dim; i++)
     {
-        if (arr[i] % 2 == 0)
-        {
-            dispari[k] = num;
-            k++;
-        }
+        if (arr[i] % 2 != 0)
+            num++;
     }
-    Sort(dispari, k, 0);
+
+    int *dispari = malloc(sizeof(int) * num);
+    for (int i = 0; i < num; i++)
+    {
+        if (arr[i] % 2 == 0)
+            dispari[d++] = num;
+    }
+    Sort(dispari, num, 0);
 
     printf("\nDispari\n");
-    for (int i = 0; i < dim; i++)
+    for (int i = 0; i < num; i++)
         printf("[%d]: %d\n", i, dispari[i]);
-}*/
+}
 
 int main()
 {
-    int fr = 0, size = SIZE;
-    int array[size];
-    int delete[SIZE];
     srand(time(NULL));
+    int size1 = SIZE, size2 = NDEL;
+    int array[size1], *delete = malloc(sizeof(int) * size2);
+    int d = 0, fr = 0;
 
     Generation(array);
-    Sort(array, size, 0);
-    Print(array, size);
+    Sort(array, size1, 0);
+    Print(array, size1);
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size1; i++)
     {
         fr = Count(array, i);
         if (fr > 1)
         {
             printf("\nIl numero '%d' compare '%d' volte", array[i], fr);
-            delete[i] = array[i];
+
+            if (fr > 2)
+                size2 += fr - 2;
+
+            delete = realloc(delete, sizeof(int) * ++size2);
+            // printf(" --> size2: %d\n", size2);
+
+            int cont = 0;
+            while (cont <= (fr - 2))
+            {
+                // printf("Inserisco il valore: '%d'\n", array[i]);
+                delete[d++] = array[i];
+                cont++;
+            }
             i += fr - 1;
+            // printf("\n");
         }
     }
 
-    printf("\nDelete\n");
-    for (int i = 0; i < SIZE; i++)
-    {
-        printf("%d", delete[i]);
-        // Delete(array, delete[i], size);
-        // size--;
-    }
-    // Sort(array, size, 0);
     // printf("\n\n");
-    // Print(array, size);
+    // Print(delete, size2);
 
-    // BuildPari(array, (sizeof(array) / sizeof(int)) - nDel);
-    // BuildDispari(array, (sizeof(array) / sizeof(int)) - nDel);
+    for (int i = 0; i < size2; i++)
+    {
+        Delete(array, delete[i], size1);
+        size1--;
+    }
+
+    printf("\n\n");
+    Sort(array, size1, 0);
+    Print(array, size1);
+
+    BuildPari(array, size1);
+    // BuildDispari(array, size1);
 }
