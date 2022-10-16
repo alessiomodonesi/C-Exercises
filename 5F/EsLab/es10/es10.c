@@ -81,7 +81,6 @@ void Delete(int *arr, int canc, int size)
     {
         if (arr[i] == canc)
         {
-            // printf("Sto eliminando il numero: %d\n", arr[i]);
             int tmp = arr[i];
             arr[i] = arr[size - 1];
             arr[size - 1] = tmp;
@@ -99,18 +98,16 @@ void BuildPari(int *arr, int dim)
             num++;
     }
 
-    int *pari = malloc(sizeof(int) * num + 1);
-    printf("\npari: %d, ", num);
-    printf("dim: %lu\n", sizeof(pari) / sizeof(int));
-
-    for (int i = 0; i < num; i++)
+    int *pari = malloc(sizeof(int) * num); // sizeof(pari) SEMPRE = 8 byte
+    for (int i = 0; i < dim; i++)
     {
         if (arr[i] % 2 == 0)
-            pari[p++] = num;
+        {
+            pari[p++] = arr[i];
+        }
     }
     Sort(pari, num, 1);
-
-    printf("\nPari\n");
+    printf("\n\nPari\n");
     for (int i = 0; i < num; i++)
         printf("[%d]: %d\n", i, pari[i]);
 }
@@ -124,14 +121,15 @@ void BuildDispari(int *arr, int dim)
             num++;
     }
 
-    int *dispari = malloc(sizeof(int) * num);
-    for (int i = 0; i < num; i++)
+    int *dispari = malloc(sizeof(int) * num); // sizeof(pari) SEMPRE = 8 byte
+    for (int i = 0; i < dim; i++)
     {
-        if (arr[i] % 2 == 0)
-            dispari[d++] = num;
+        if (arr[i] % 2 != 0)
+        {
+            dispari[d++] = arr[i];
+        }
     }
     Sort(dispari, num, 0);
-
     printf("\nDispari\n");
     for (int i = 0; i < num; i++)
         printf("[%d]: %d\n", i, dispari[i]);
@@ -153,28 +151,21 @@ int main()
         fr = Count(array, i);
         if (fr > 1)
         {
-            printf("\nIl numero '%d' compare '%d' volte", array[i], fr);
+            printf("\nnum: %d - rep: %d", array[i], fr);
 
             if (fr > 2)
                 size2 += fr - 2;
-
             delete = realloc(delete, sizeof(int) * ++size2);
-            // printf(" --> size2: %d\n", size2);
 
             int cont = 0;
             while (cont <= (fr - 2))
             {
-                // printf("Inserisco il valore: '%d'\n", array[i]);
                 delete[d++] = array[i];
                 cont++;
             }
             i += fr - 1;
-            // printf("\n");
         }
     }
-
-    // printf("\n\n");
-    // Print(delete, size2);
 
     for (int i = 0; i < size2; i++)
     {
@@ -182,10 +173,6 @@ int main()
         size1--;
     }
 
-    printf("\n\n");
-    Sort(array, size1, 0);
-    Print(array, size1);
-
     BuildPari(array, size1);
-    // BuildDispari(array, size1);
+    BuildDispari(array, size1);
 }
