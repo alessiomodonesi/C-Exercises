@@ -1,2 +1,2 @@
-# C_Exercise
+# C-Exercise
 Esercizi in linguaggio C
