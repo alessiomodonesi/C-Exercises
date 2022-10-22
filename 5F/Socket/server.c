@@ -13,7 +13,7 @@ int main()
     int server, valread, new_socket;
     int addrlen = sizeof(address), opt = 1;
     char buffer[1024] = {0};
-    char *msg = "4) server: hello";
+    char string[1024] = {0};
 
     if ((server = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -47,12 +47,19 @@ int main()
         exit(1);
     }
 
-    valread = read(new_socket, buffer, 1024);
-    printf("%s\n", buffer);
+    while (1)
+    {
+        valread = read(new_socket, buffer, 1024);
+        printf("Read: %s\n", buffer);
 
-    send(new_socket, msg, strlen(msg), 0);
-    printf("3) server: message sent\n");
+        printf("Write: %s", string);
+        scanf("%s", string);
 
+        if (strcmp(string, "esc") != 0)
+            send(new_socket, string, strlen(string), 0);
+        else
+            return 0;
+    }
     close(new_socket);
     shutdown(server, SHUT_RDWR);
 }

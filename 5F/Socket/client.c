@@ -11,7 +11,7 @@ int main()
     struct sockaddr_in serv_addr;
     int client, valread, sock = 0;
     char buffer[1024] = {0};
-    char *msg = "2) client: hello";
+    char string[1024] = {0};
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -35,11 +35,18 @@ int main()
         return -1;
     }
 
-    send(sock, msg, strlen(msg), 0);
-    printf("1) client: message sent\n");
+    while (1)
+    {
+        printf("Write: ");
+        scanf("%s", string);
 
-    valread = read(sock, buffer, 1024);
-    printf("%s\n", buffer);
+        if (strcmp(string, "esc") != 0)
+            send(sock, string, strlen(string), 0);
+        else
+            return 0;
 
+        valread = read(sock, buffer, 1024);
+        printf("Read: %s\n", buffer);
+    }
     close(client);
 }
