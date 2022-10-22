@@ -6,7 +6,7 @@
 
 #define PORT 8080
 
-int main(int argc, char const *argv[])
+int main()
 {
     int sock = 0, valread, client_fd;
     struct sockaddr_in serv_addr;
