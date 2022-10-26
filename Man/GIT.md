@@ -27,7 +27,7 @@ Configuriamo il nostro git con le nostre credenziali di GitHub:
 2) Inizializziamo un progetto esistente su un server git:
       
       git clone serverURL.git
-      Esempio: git clone https://github.com/tesseslol/irixos-websites.git
+      Esempio: git clone https://github.com/alessiomodonesi/C-Exercises.git
 Git clone permette di copiare il .git file del server e anche il repository.
 
 Configurazione del server remoto
@@ -40,7 +40,7 @@ P.S. di solito il server principale si chiama origin <br>
 Ora aggiungiamo un server remoto:
 
       git remote add identificatoreServerRemoto UrlServerRemoto
-      Esempio: git remote add origin https://github.com/tesseslol/irixos-websites.git
+      Esempio: git remote add origin https://github.com/alessiomodonesi/C-Exercises.git
 
 Lavoriamo nel progetto:
 -----------------------
