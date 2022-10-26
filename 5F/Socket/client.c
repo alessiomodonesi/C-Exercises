@@ -4,14 +4,15 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+#define DIM 1024
 #define PORT 8080
 
 int main()
 {
     struct sockaddr_in address;
     int client, valread, sock = 0;
-    char buffer[1024] = {0};
-    char string[1024] = {0};
+    char buffer[DIM] = {0};
+    char string[DIM] = {0};
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {

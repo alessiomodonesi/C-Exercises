@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#define DIM 1024
 #define PORT 8080
 
 int main()
@@ -12,8 +13,8 @@ int main()
     struct sockaddr_in address;
     int server, valread, new_socket;
     int addrlen = sizeof(address), opt = 1;
-    char buffer[1024] = {0};
-    char string[1024] = {0};
+    char buffer[DIM] = {0};
+    char string[DIM] = {0};
 
     if ((server = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
