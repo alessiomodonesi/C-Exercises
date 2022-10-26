@@ -8,7 +8,7 @@
 
 int main()
 {
-    struct sockaddr_in serv_addr;
+    struct sockaddr_in address;
     int client, valread, sock = 0;
     char buffer[1024] = {0};
     char string[1024] = {0};
@@ -19,17 +19,17 @@ int main()
         return -1;
     }
 
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT);
+    address.sin_family = AF_INET;
+    address.sin_port = htons(PORT);
 
-    if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0)
+    if (inet_pton(AF_INET, "127.0.0.1", &address.sin_addr) <= 0)
     {
         printf("\ninvalid address\n");
         return -1;
     }
 
-    if ((client = connect(sock, (struct sockaddr *)&serv_addr,
-                          sizeof(serv_addr))) < 0)
+    if ((client = connect(sock, (struct sockaddr *)&address,
+                          sizeof(address))) < 0)
     {
         printf("\nconnection failed\n");
         return -1;
