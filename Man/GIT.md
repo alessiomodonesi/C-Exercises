@@ -43,7 +43,7 @@ Ora aggiungiamo un server remoto:
       Esempio: git remote add origin https://github.com/alessiomodonesi/C-Exercises.git
       
       git remote set-url origin https://<token>@github.com/<username>/<repository>
-      git remote set-url origin https://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@github.com/alessiomodonesi/C-Exercises
+      Esempio: git remote set-url origin https://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@github.com/alessiomodonesi/C-Exercises
 
 Lavoriamo nel progetto:
 -----------------------
