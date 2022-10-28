@@ -16,8 +16,8 @@ Configurazioni di base di git
 -----------------------------
 Configuriamo il nostro git con le nostre credenziali di GitHub:
 
-      git config --global user.name 'Tuo Nome GitHub'
-      git config --global user.email email@github.com
+      git config --global user.name <username>
+      git config --global user.email <email>
 
 ### Ci sono due modi per instanzire un progetto ###
 1) Inizializziamo un progetto non esistente:
@@ -26,7 +26,7 @@ Configuriamo il nostro git con le nostre credenziali di GitHub:
 
 2) Inizializziamo un progetto esistente su un server git:
       
-      git clone serverURL.git
+      git clone <serverURL>.git
       Esempio: git clone https://github.com/alessiomodonesi/C-Exercises.git
 Git clone permette di copiare il .git file del server e anche il repository.
 
@@ -39,14 +39,17 @@ P.S. di solito il server principale si chiama origin <br>
 
 Ora aggiungiamo un server remoto:
 
-      git remote add identificatoreServerRemoto UrlServerRemoto
+      git remote add origin <serverURL>.git
       Esempio: git remote add origin https://github.com/alessiomodonesi/C-Exercises.git
+      
+      git remote set-url origin https://<token>@github.com/<username>/<repository>
+      git remote set-url origin https://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@github.com/alessiomodonesi/C-Exercises
 
 Lavoriamo nel progetto:
 -----------------------
 Aggiungiamo i file dalla directory del progetto all'index:
       
-      git add nome_file
+      git add <nome_file>
 Si può utilizzare l'asterisco per aggiungere tutti i file. Se si vuole escludere un file dalla selezione totale (con l'asterisco) basta creare un file denominato .gitignore e metterci all'interno i file che non si vogliono aggiungere al INDEX.<br>
 
 Ora aggiungiamo i file dell'index all'head:
@@ -62,11 +65,11 @@ Annullamento dei commit:
 
 Cancellare un file da git:
 
-      git rm nomeFile
+      git rm <nomeFile>
       
 Il file ritorna allo stato precedente dell’ultimo commit:
      
-      git checkout -- nomeFile
+      git checkout -- <nomeFile>
 
 
 Lavorare con il server remoto
@@ -76,14 +79,14 @@ Aggiornare il tuo repository locale alla commit più recente:
       git pull
  Se vogliamo fare l'upload dei commit nel progetto usiamo:
       
-      git push identificatoreServerRemoto nomeBranch
+      git push origin <nomeBranch>
       Esempio: git push origin master
 Se vogliamo rinominare un file in remoto:
       
-      git remote rename identificatoreServerRemoto nomeFileVecchio nomeFileNuovo
+      git remote rename origin <nomeFileVecchio> <nomeFileNuovo>
 Se vogliamo eliminare un file in remoto:
 
-      git remote rm nomeFile
+      git remote rm <nomeFile>
  
 Stato del progetto
 ------------------
@@ -128,22 +131,22 @@ Lista dei Rami:
       git branch
 Creiamo un branch con:
       
-      git branch nomeBranch
+      git branch <nomeBranch>
       Esempio: git branch feature
 Cambia i rami:
 
-      git checkout nomeBranch
+      git checkout <nomeBranch>
       Esempio: git checkout feature
 Per ritornare al branch originale digitiamo:
 
       git checkout master
 Eliminare il ramo:
       
-      git branch -d nomeBranch
+      git branch -d <nomeBranch>
       Esempio: git branch -d feature
 Crea il ramo e passa a quel branch:
 
-      git checkout -b nomeBranch
+      git checkout -b <nomeBranch>
       Esempio: git checkout -b feature
 Per unire il branch al repository originale usiamo (ricordatevi di fare un commit nel branch):
       
