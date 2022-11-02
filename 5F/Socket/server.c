@@ -12,7 +12,7 @@
 int main()
 {
     struct sockaddr_in data, client;
-    int addrlen = sizeof(client);
+    int addrlen = sizeof(data);
     data.sin_family = AF_INET;
     data.sin_addr.s_addr = htonl(INADDR_ANY);
     // data.sin_addr.s_addr = inet_addr("127.0.0.1");
