@@ -12,7 +12,6 @@
 int main()
 {
     struct sockaddr_in data, client;
-    int addrlen = sizeof(client);
     data.sin_family = AF_INET;
     data.sin_addr.s_addr = htonl(INADDR_ANY);
     // data.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -26,6 +25,7 @@ int main()
     {
         printf("\nServer in ascolto...");
         fflush(stdout);
+        int addrlen = sizeof(client);
         int new_socket = accept(socket_fd, (struct sockaddr *)&client, (socklen_t *)&addrlen);
 
         char buffer[DIM] = {0};
