@@ -9,7 +9,7 @@
 #define DIM 1024
 #define PORT 8080
 
-int Es1(char *str) // check palindroma
+int IsPal(char *str)
 {
     for (int i = 0, _i = strlen(str) - 1; i < strlen(str) / 2; i++)
     {
@@ -19,7 +19,7 @@ int Es1(char *str) // check palindroma
     return 1;
 }
 
-int Es2(char *str, char *c) // cerca un char
+int SearchChar(char *str, char *c)
 {
     int cont = 0;
     for (int i = 0; i < strlen(str); i++)
@@ -30,7 +30,7 @@ int Es2(char *str, char *c) // cerca un char
     return cont;
 }
 
-int Es3(char *str, int flag) // conta vocali e consonanti
+int FindLetter(char *str, int flag)
 {
     int con = 0, voc = 0;
     char array[5] = {'a', 'e', 'i', 'o', 'u'};
@@ -50,7 +50,7 @@ int Es3(char *str, int flag) // conta vocali e consonanti
         return voc;
 }
 
-void Es4(char *str) // ordina la stringa
+void SortString(char *str)
 {
     char tmp;
     for (int i = 0; i < strlen(str); i++)
@@ -67,10 +67,26 @@ void Es4(char *str) // ordina la stringa
     }
 }
 
-char *Es5(char *str) // cerca le lettere comuni tra 2 stringhe
+char CommonLetter(char *str1, char *str2, char *res)
 {
-    char res[DIM];
-    return res;
+    int x = 0;
+    for (int i = 0; i < strlen(str1); i++)
+    {
+        for (int j = 0; j < strlen(str2); j++)
+        {
+            if (str1[i] == str2[j])
+            {
+                res[x++] = str1[i];
+            }
+        }
+    }
+    return *res;
+}
+
+void FlushBuffer(char *arr)
+{
+    for (int i = 0; i < DIM + 1; i++)
+        arr[i] = '\0';
 }
 
 int main()
@@ -91,24 +107,41 @@ int main()
         int length = sizeof(client);
         int socket_client = accept(socket_server, (struct sockaddr *)&client, (socklen_t *)&length);
 
-        char c;
-        char common[DIM];
-        char string[DIM];
-        char buffer[DIM];
-        read(socket_client, string, DIM);
-        read(socket_client, c, strlen(c));
+        char string1[DIM], string2[DIM], buffer[DIM], common[DIM], c[1];
+        read(socket_client, string1, DIM);
+        read(socket_client, string2, DIM);
+        read(socket_client, c, DIM);
 
-        strcat(buffer, string);
-        if (Es1(string) == 1)
-            strcat(buffer, ", palindroma");
+        // es 1
+        if (IsPal(string1) == 1)
+            sprintf(buffer, "\nLa tua stringa è palindroma");
         else
-            strcat(buffer, ", non palindroma");
-        int res = Es2(string, c);
-        int con = Es3(string, 0);
-        int voc = Es3(string, 1);
-        Es4(string);
-        Es5(string);
+            sprintf(buffer, "\nLa tua stringa NON è palindroma");
+        write(socket_client, buffer, strlen(buffer));
+        FlushBuffer(buffer);
 
+        // es 2
+        int num = SearchChar(string1, c);
+        sprintf(buffer, "\nChar '%s' trovato %d volte", c, num);
+        write(socket_client, buffer, strlen(buffer));
+        FlushBuffer(buffer);
+
+        // es 3
+        int con = FindLetter(string1, 0);
+        int voc = FindLetter(string1, 1);
+        sprintf(buffer, "\nConsonanti: %d \nVocali: %d", con, voc);
+        write(socket_client, buffer, strlen(buffer));
+        FlushBuffer(buffer);
+
+        // es 4
+        SortString(string1);
+        sprintf(buffer, "\nStringa ordinata: %s", string1);
+        write(socket_client, buffer, strlen(buffer));
+        FlushBuffer(buffer);
+
+        // es 5
+        CommonLetter(string1, string2, common);
+        sprintf(buffer, "\nLettere in comune: %s", common);
         write(socket_client, buffer, strlen(buffer));
         close(socket_client);
     }
