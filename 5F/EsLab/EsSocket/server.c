@@ -83,12 +83,6 @@ char CommonLetter(char *str1, char *str2, char *res)
     return *res;
 }
 
-void FlushBuffer(char *arr)
-{
-    for (int i = 0; i < DIM + 1; i++)
-        arr[i] = '\0';
-}
-
 int main()
 {
     struct sockaddr_in server, client;
@@ -99,50 +93,49 @@ int main()
     int socket_server = socket(AF_INET, SOCK_STREAM, 0);
     bind(socket_server, (struct sockaddr *)&server, sizeof(server));
     listen(socket_server, 10);
+    printf("\nlistening server...");
 
     while (1)
     {
-        printf("\nServer in ascolto...");
+        char buffer[DIM] = {0}, common[DIM] = {0};
         fflush(stdout);
         int length = sizeof(client);
         int socket_client = accept(socket_server, (struct sockaddr *)&client, (socklen_t *)&length);
 
-        char string1[DIM], string2[DIM], buffer[DIM], common[DIM], c[1];
-        read(socket_client, string1, DIM);
-        read(socket_client, string2, DIM);
-        read(socket_client, c, DIM);
-
         // es 1
+        char string1[DIM] = {0};
+        read(socket_client, string1, sizeof(string1));
         if (IsPal(string1) == 1)
-            sprintf(buffer, "\nLa tua stringa è palindroma");
+            sprintf(buffer, "\nthe string is palindrome");
         else
-            sprintf(buffer, "\nLa tua stringa NON è palindroma");
-        write(socket_client, buffer, strlen(buffer));
-        FlushBuffer(buffer);
+            sprintf(buffer, "\nthe string is NOT palindrome");
+        write(socket_client, buffer, sizeof(buffer));
 
         // es 2
+        char c[1] = {0};
+        read(socket_client, c, sizeof(c));
         int num = SearchChar(string1, c);
-        sprintf(buffer, "\nChar '%s' trovato %d volte", c, num);
-        write(socket_client, buffer, strlen(buffer));
-        FlushBuffer(buffer);
+        sprintf(buffer, "\nchar founded %d times", num / 4);
+        write(socket_client, buffer, sizeof(buffer));
 
         // es 3
         int con = FindLetter(string1, 0);
         int voc = FindLetter(string1, 1);
-        sprintf(buffer, "\nConsonanti: %d \nVocali: %d", con, voc);
-        write(socket_client, buffer, strlen(buffer));
-        FlushBuffer(buffer);
+        sprintf(buffer, "\nconsonants: %d \nvowels: %d", con, voc);
+        write(socket_client, buffer, sizeof(buffer));
 
         // es 4
         SortString(string1);
-        sprintf(buffer, "\nStringa ordinata: %s", string1);
-        write(socket_client, buffer, strlen(buffer));
-        FlushBuffer(buffer);
+        sprintf(buffer, "\nsorted string: %s", string1);
+        write(socket_client, buffer, sizeof(buffer));
 
         // es 5
+        char string2[DIM] = {0};
+        read(socket_client, string2, sizeof(string2));
         CommonLetter(string1, string2, common);
-        sprintf(buffer, "\nLettere in comune: %s", common);
-        write(socket_client, buffer, strlen(buffer));
+        sprintf(buffer, "\ncommon letters: %s", common);
+        write(socket_client, buffer, sizeof(buffer));
+
         close(socket_client);
     }
     close(socket_server);
