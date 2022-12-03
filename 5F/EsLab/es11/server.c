@@ -9,7 +9,7 @@
 #define DIM 1024
 #define PORT 8080
 
-int IsPal(char *str)
+int Palindrome(char *str)
 {
     for (int i = 0, _i = strlen(str) - 1; i < strlen(str) / 2; i++)
     {
@@ -19,12 +19,12 @@ int IsPal(char *str)
     return 1;
 }
 
-int SearchChar(char *str, char *c)
+int SearchChar(char *str, char c)
 {
     int cont = 0;
     for (int i = 0; i < strlen(str); i++)
     {
-        if (strcmp(&str[i], c))
+        if (str[i] == c)
             cont++;
     }
     return cont;
@@ -50,24 +50,26 @@ int FindLetter(char *str, int flag)
         return voc;
 }
 
-void SortString(char *str)
+char *SortString(char *str1, char *str3)
 {
     char tmp;
-    for (int i = 0; i < strlen(str); i++)
+    strcpy(str3, str1);
+    for (int i = 0; i < strlen(str3); i++)
     {
-        for (int j = 0; j < (strlen(str) - 1); j++)
+        for (int j = 0; j < (strlen(str3) - 1); j++)
         {
-            if (str[j] > str[j + 1])
+            if (str3[j] > str3[j + 1])
             {
-                tmp = str[j];
-                str[j] = str[j + 1];
-                str[j + 1] = tmp;
+                tmp = str3[j];
+                str3[j] = str3[j + 1];
+                str3[j + 1] = tmp;
             }
         }
     }
+    return str3;
 }
 
-char CommonLetter(char *str1, char *str2, char *res)
+char *CommonLetter(char *str1, char *str2, char *str4)
 {
     int x = 0;
     for (int i = 0; i < strlen(str1); i++)
@@ -76,11 +78,11 @@ char CommonLetter(char *str1, char *str2, char *res)
         {
             if (str1[i] == str2[j])
             {
-                res[x++] = str1[i];
+                str4[x++] = str1[i];
             }
         }
     }
-    return *res;
+    return str4;
 }
 
 int main()
@@ -97,45 +99,53 @@ int main()
 
     while (1)
     {
-        char buffer[DIM] = {0}, common[DIM] = {0};
         fflush(stdout);
+        char buffer[DIM];
         int length = sizeof(client);
         int socket_client = accept(socket_server, (struct sockaddr *)&client, (socklen_t *)&length);
 
+        // get str1 by the client
+        char str1[DIM];
+        read(socket_client, str1, DIM);
+
+        // get a char by the server
+        char c;
+        read(socket_client, &c, DIM);
+
+        // get str2 by the client
+        char str2[DIM];
+        read(socket_client, str2, DIM);
+
+        for (int i = 0; i < DIM + 1; i++)
+            buffer[i] = '\0';
+
+        sprintf(buffer, "Results: \n");
+
         // es 1
-        char string1[DIM] = {0};
-        read(socket_client, string1, sizeof(string1));
-        if (IsPal(string1) == 1)
-            sprintf(buffer, "\nthe string is palindrome");
+        if (Palindrome(str1) == 1)
+            sprintf(buffer + strlen(buffer), "%s is palindrome \n", str1);
         else
-            sprintf(buffer, "\nthe string is NOT palindrome");
-        write(socket_client, buffer, sizeof(buffer));
+            sprintf(buffer + strlen(buffer), "%s is NOT palindrome \n", str1);
 
         // es 2
-        char c[1] = {0};
-        read(socket_client, c, sizeof(c));
-        int num = SearchChar(string1, c);
-        sprintf(buffer, "\nchar founded %d times", num / 4);
-        write(socket_client, buffer, sizeof(buffer));
+        int num = SearchChar(str1, c);
+        sprintf(buffer + strlen(buffer), "%c founded %d times \n", c, num / 4);
 
         // es 3
-        int con = FindLetter(string1, 0);
-        int voc = FindLetter(string1, 1);
-        sprintf(buffer, "\nconsonants: %d \nvowels: %d", con, voc);
-        write(socket_client, buffer, sizeof(buffer));
+        int con = FindLetter(str1, 0);
+        int voc = FindLetter(str1, 1);
+        sprintf(buffer + strlen(buffer), "%d consonants \n%d vowels \n", con, voc);
 
         // es 4
-        SortString(string1);
-        sprintf(buffer, "\nsorted string: %s", string1);
-        write(socket_client, buffer, sizeof(buffer));
+        char str3[DIM] = {*SortString(str1, str3)};
+        sprintf(buffer + strlen(buffer), "sort(%s): %s \n", str1, str3);
 
         // es 5
-        char string2[DIM] = {0};
-        read(socket_client, string2, sizeof(string2));
-        CommonLetter(string1, string2, common);
-        sprintf(buffer, "\ncommon letters: %s", common);
-        write(socket_client, buffer, sizeof(buffer));
+        char str4[DIM] = {*CommonLetter(str1, str2, str4)};
+        sprintf(buffer + strlen(buffer), "common letters: %s \n", str4);
 
+        // response to the client
+        write(socket_client, buffer, sizeof(buffer));
         close(socket_client);
     }
     close(socket_server);
