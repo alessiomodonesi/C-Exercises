@@ -1,46 +1,114 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define DIM 1024
-#define PORT 8080
-
 int main()
 {
-    struct sockaddr_in server;
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server.sin_port = htons(PORT);
+    int sockfd;
+    struct sockaddr_in serv_addr;
+    char buffer[1024];
 
-    int socket_client = socket(AF_INET, SOCK_STREAM, 0);
-    connect(socket_client, (struct sockaddr *)&server, sizeof(server));
+    // Creazione del socket
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+    {
+        printf("Errore nell'apertura del socket\n");
+        return 1;
+    }
+    memset(&serv_addr, '0', sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(1234);
 
-    // send str1 to the server
-    char str1[DIM];
-    printf("send the 1st string: ");
-    scanf("%s", str1);
-    write(socket_client, str1, sizeof(str1));
+    // Converti l'indirizzo IP in una forma di servizio
+    if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0)
+    {
+        printf("Errore nell'indirizzo IP\n");
+        return 1;
+    }
 
-    // send a char to the server
-    char c;
-    printf("send a char: ");
-    scanf(" %c", &c);
-    write(socket_client, &c, sizeof(c));
+    // Connessione al server
+    if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    {
+        printf("Errore nella connessione\n");
+        return 1;
+    }
 
-    // send str2 to the server
-    char str2[DIM];
-    printf("send the 2nd string: ");
-    scanf("%s", str2);
-    write(socket_client, str2, sizeof(str2));
+    // scelta dell'esercizio
+    int num;
+    printf("Inserire il numero dell'esercizio da eseguire (1-5): ");
+    scanf("%d", &num);
+    buffer[0] = num;
 
-    // response by the server
-    char buffer[DIM];
-    read(socket_client, buffer, DIM);
-    printf("\n%s\n", buffer);
+    // invio dell'esercizio da eseguire
+    send(sockfd, buffer, strlen(buffer), 0);
 
-    close(socket_client);
+    // invio dei dati necessari all'esecuzione dell'esercizio
+    switch (num)
+    {
+    case 1:
+    {
+        char str[50];
+        printf("Inserire la stringa da controllare: ");
+        scanf("%s", str);
+        strcpy(buffer, str);
+        send(sockfd, buffer, strlen(buffer), 0);
+        break;
+    }
+    case 2:
+    {
+        char str[50];
+        char c;
+        printf("Inserire la stringa da controllare: ");
+        scanf("%s", str);
+        printf("Inserire il carattere da cercare: ");
+        scanf(" %c", &c);
+        strcpy(buffer, str);
+        buffer[strlen(str)] = c;
+        send(sockfd, buffer, strlen(buffer), 0);
+        break;
+    }
+    case 3:
+    {
+        char str[50];
+        printf("Inserire la stringa da controllare: ");
+        scanf("%s", str);
+        strcpy(buffer, str);
+        send(sockfd, buffer, strlen(buffer), 0);
+        break;
+    }
+    case 4:
+    {
+        char str[50];
+        printf("Inserire la stringa da ordinare: ");
+        scanf("%s", str);
+        strcpy(buffer, str);
+        send(sockfd, buffer, strlen(buffer), 0);
+        break;
+    }
+    case 5:
+    {
+        char str1[50];
+        char str2[50];
+        printf("Inserire la prima stringa: ");
+        scanf("%s", str1);
+        printf("Inserire la seconda stringa: ");
+        scanf("%s", str2);
+        strcpy(buffer, str1);
+        strcat(buffer, str2);
+        send(sockfd, buffer, strlen(buffer), 0);
+        break;
+    }
+    }
+
+    // Risposta dal server
+    int n = recv(sockfd, buffer, 1024, 0);
+    buffer[n] = '\0';
+    printf("Risposta dal server: %s\n", buffer);
+
+    return 0;
 }
