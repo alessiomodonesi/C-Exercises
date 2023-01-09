@@ -1,4 +1,4 @@
-Git guida
+Git
 =========
 Cos'è git?
 -----------
