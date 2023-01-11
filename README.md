@@ -1,7 +1,7 @@
-Git
-=========
+Guida per Git
+==============
 Cos'è git?
------------
+--------------
 Git è un software di controllo versione distribuito utilizzabile da interfaccia a riga di comando, creato da Linus Torvalds nel 2005. Git lavora con i repository.
 Un repository git ha 4 stati di lavoro. Il primo è la tua directory corrente.
 Il secondo è l'index che fa da spazio di transito per i files (git add \*). 
