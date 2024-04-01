@@ -41,7 +41,6 @@ P.S. di solito il server principale si chiama origin <br>
 
 Ora aggiungiamo un server remoto:
 
-      git remote add origin <serverURL>.git
       git remote set-url origin https://<token>@github.com/<username>/<repository>
 
 Lavoriamo nel progetto:
