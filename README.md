@@ -1,200 +1,310 @@
-Guida per Git
-==============
+# Guida a Git
 
-Cos'è git?
---------------
+## Cos'è Git?
 
-Git è un software di controllo versione distribuito utilizzabile da interfaccia a riga di comando, creato da Linus Torvalds nel 2005. Git lavora con i repository.
-Un repository git ha 4 stati di lavoro. Il primo è la tua directory corrente.
-Il secondo è l'index che fa da spazio di transito per i files (git add \*).
-Il terzo è l'head che punta all'ultimo commit fatto (git commit -m "messaggio"). E l'ultimo è il repository è online (git push server).
+Git è un software di controllo versione distribuito creato da Linus Torvalds nel 2005. Permette di gestire la cronologia delle modifiche di un progetto e di collaborare con altri sviluppatori tramite repository locali e remoti.
 
-I repository online e locali possono essere divisi in ramificazioni (Branch).
-I branch (ramificazioni) permettono di creare delle versioni assestanti del codice master. Queste versioni "assestanti" permettono la creazione di features o aggiornamenti in fase alpha che non vanno ad intaccare minimamente il codice del progetto. Finito la scrittura della ramificazione il branch verrà unito con il master.
+Un repository Git ha quattro stati principali:
 
-Git permette di gestire i tag. I tag sono le versioni del software in uso. I tag registrano tutti i commit fino al rilascio nel server.
+1. **Working directory**: Contiene i file attuali del progetto.
+2. **Index (staging area)**: Uno spazio intermedio in cui si preparano i file per il commit (`git add`).
+3. **HEAD**: Punta all'ultimo commit registrato (`git commit`).
+4. **Remote repository**: Il repository online su un server remoto (`git push`).
 
-Configurazioni di base di git
------------------------------
+Git supporta la gestione dei **branch**, che permettono di sviluppare funzionalità in parallelo senza influenzare il codice principale. Una volta completato lo sviluppo, il branch può essere unito al `main` o `master` tramite `git merge`.
 
-Configuriamo il nostro git con le nostre credenziali di GitHub:
+Git permette anche di creare **tag**, che sono versioni specifiche di un progetto, solitamente utilizzate per identificare rilasci importanti.
 
-      git config --global user.name <username>
-      git config --global user.email <email>
+---
 
-Ci sono due modi per instanzire un progetto
+## Configurazioni di base di Git
 
-1) Inizializziamo un progetto non esistente:
+Prima di iniziare a usare Git, è necessario configurare le proprie credenziali:
 
-      git init
+```sh
+git config --global user.name "IlTuoNome"
+git config --global user.email "email@example.com"
+```
 
-2) Inizializziamo un progetto esistente su un server git:
+### Creazione di un repository
 
-      git clone <serverURL>.git
+Ci sono due modi per inizializzare un repository Git:
 
-      Esempio: git clone <https://github.com/alessiomodonesi/C-Exercises.git>
+1. Creare un nuovo repository:
 
-      Git clone permette di copiare il .git file del server e anche il repository.
+   ```sh
+   git init
+   ```
 
-Configurazione del server remoto
---------------------------------
+2. Clonare un repository esistente:
 
-Con questo comando visualizziamo la lista di server remoti salvati con relativo url:
+   ```sh
+   git clone <serverURL>.git
+   ```
 
-      git remote -v
-P.S. di solito il server principale si chiama origin <br>
+   **Esempio:**
 
-Ora aggiungiamo un server remoto:
+   ```sh
+   git clone https://github.com/username/repository.git
+   ```
 
-      git remote set-url origin https://<token>@github.com/<username>/<repository>
+---
 
-Lavoriamo nel progetto
------------------------
+## Configurazione del server remoto
 
-Aggiungiamo i file dalla directory del progetto all'index:
+Visualizzare i server remoti configurati:
 
-      git add <nome_file>
-Si può utilizzare l'asterisco per aggiungere tutti i file. Se si vuole escludere un file dalla selezione totale (con l'asterisco) basta creare un file denominato .gitignore e metterci all'interno i file che non si vogliono aggiungere al INDEX.
+```sh
+git remote -v
+```
 
-Ora aggiungiamo i file dell'index all'head:
+Aggiungere un nuovo server remoto:
 
-      git commit -m "Messaggio del commit"
-Per non tracciare il file usiamo l'argomento -a:
+```sh
+git remote add origin https://github.com/username/repository.git
+```
 
-      git commit -a -m "Messaggio del commit"
-      
-Annullamento dei commit:
+Aggiornare l'URL del server remoto:
 
-      git commit --amend
+```sh
+git remote set-url origin https://<token>@github.com/<username>/<repository>
+```
 
-Cancellare un file da git:
+Rinominare un server remoto:
 
-      git rm <nomeFile>
-      
-Il file ritorna allo stato precedente dell’ultimo commit:
+```sh
+git remote rename origin nuovo_nome
+```
 
-      git checkout -- <nomeFile>
+Rimuovere un server remoto:
 
-Lavorare con il server remoto
------------------------------
+```sh
+git remote rm nome_server
+```
 
-Aggiornare il tuo repository locale alla commit più recente:
+---
 
-      git pull
- Se vogliamo fare l'upload dei commit nel progetto usiamo:
+## Lavorare con Git
 
-      git push origin <nomeBranch>
-      Esempio: git push origin master
-Se vogliamo rinominare un file in remoto:
+### Aggiungere e registrare modifiche
 
-      git remote rename origin <nomeFileVecchio> <nomeFileNuovo>
-Se vogliamo eliminare un file in remoto:
+Aggiungere file all'**index**:
 
-      git remote rm <nomeFile>
+```sh
+git add <nome_file>
+```
 
-Stato del progetto
-------------------
+Aggiungere tutti i file modificati:
 
-Per vedere le modifiche del progetto digitiamo:
+```sh
+git add .
+```
 
-      git status
-Per vedere i cambiamenti dei singoli files digitiamo:
+Escludere file specifici creando un `.gitignore`:
 
-      git diff
-Vedere tutti i commit:
+```
+*.log
+/node_modules/
+config.json
+```
 
-      git log
+Registrare i file nello **staging area** e creare un commit:
 
-Gestire i tag
--------------
+```sh
+git commit -m "Messaggio del commit"
+```
 
-Per visualizzare tutte le versioni eseguimo il comando:
+Annullare l'ultimo commit (senza perdere le modifiche):
 
-      git tag
-Per visualizzare tutte le versioni con un determinato numero:
+```sh
+git reset --soft HEAD~1
+```
 
-      git tag -l 1*
-Creazione di un tag:
+Annullare l'ultimo commit eliminando le modifiche:
 
-      git tag -a versioneSoftware -m "nota sul tag"
-      Esempio: git tag -a 1.2.3rc1 -m "aggiornato la navbar"
-Vedere tutte le modifiche di un tag:
+```sh
+git reset --hard HEAD~1
+```
 
-      git show 1.2.3rc1
-Condividere i tag:
+---
 
-      git push identificatoreServerRemoto tagDaPubblicare
-      Esempio: git push origin 1.2.3rc1 
-Condividere tutti i tag:
+## Sincronizzazione con il server remoto
 
-      git push identificatoreServerRemoto --tag
-      Esempio: git push origin --tag
-            
-Gestire i Branch
-----------------
+Aggiornare il repository locale con le modifiche dal server remoto:
 
-Lista dei Rami:
+```sh
+git pull origin <nome_branch>
+```
 
-      git branch
-Creiamo un branch con:
+Inviare i commit al repository remoto:
 
-      git branch <nomeBranch>
-      Esempio: git branch feature
-Cambia i rami:
+```sh
+git push origin <nome_branch>
+```
 
-      git checkout <nomeBranch>
-      Esempio: git checkout feature
-Per ritornare al branch originale digitiamo:
+Forzare un push (usare con attenzione!):
 
-      git checkout master
-Eliminare il ramo:
+```sh
+git push --force
+```
 
-      git branch -d <nomeBranch>
-      Esempio: git branch -d feature
-Crea il ramo e passa a quel branch:
+---
 
-      git checkout -b <nomeBranch>
-      Esempio: git checkout -b feature
-Per unire il branch al repository originale usiamo (ricordatevi di fare un commit nel branch):
+## Controllare lo stato del progetto
 
-      git checkout master
-      git merge feature
+Verificare lo stato dei file:
 
-Git Parameters
----------------
+```sh
+git status
+```
 
-***Inizializza l'area di lavoro***
+Vedere le differenze tra le versioni dei file:
 
-     clone      Clona un repository in una cartella
-     init       Crea un git repository o ne inizializza uno
+```sh
+git diff
+```
 
-***Lavorare nel progetto corrente***
+Visualizzare la cronologia dei commit:
 
-      add        Aggiungere i file nel INDEX
-      mv         Muove o rinomina un file, una directory
-      reset      Resetta il corrente HEAD nello stato specificato
-      rm         Rimuove i file dalla directory corrente e nel INDEX
+```sh
+git log --oneline --graph --decorate --all
+```
 
-***Mostra la cronologia e lo stato***
+Ripristinare un file allo stato dell'ultimo commit:
 
-      bisect     Use binary search to find the commit that introduced a bug
-      grep       Print lines matching a pattern
-      log        Mostra i commit log
-      status     stato del contenuto di un progetto
-      show       Show various types of objects
+```sh
+git checkout -- <nome_file>
+```
 
-***Grow, mark and tweak your common history***
+---
 
-      branch     Visualizza, crea e elimina ramo (branches)
-      checkout   Cambia ramo (branches) o ripristina la strotura dell'area di lavoro 
-      commit     Registra le modifiche del repository
-      diff       Confronta i commit (esp: commit e area di lovoro)
-      merge      Unisce una o più cronologie di sviluppo
-      rebase     Reapply commits on top of another base tip
-      tag        Crea, visualizza la lista, elimina o verifica il tag della versione del progetto
+## Gestione dei Tag
 
-***Collabora***
+Elenco di tutti i tag disponibili:
 
-      fetch      Download objects and refs from another repository
-      pull       Fetch from and integrate with another repository or a local branch
-      push       Update remote refs along with associated objects
+```sh
+git tag
+```
+
+Creare un nuovo tag:
+
+```sh
+git tag -a v1.0.0 -m "Versione stabile 1.0.0"
+```
+
+Vedere le informazioni di un tag:
+
+```sh
+git show v1.0.0
+```
+
+Pubblicare un tag sul repository remoto:
+
+```sh
+git push origin v1.0.0
+```
+
+Eliminare un tag:
+
+```sh
+git tag -d v1.0.0
+git push origin --delete v1.0.0
+```
+
+---
+
+## Gestione dei Branch
+
+Elenco dei branch disponibili:
+
+```sh
+git branch
+```
+
+Creare un nuovo branch:
+
+```sh
+git branch <nome_branch>
+```
+
+Spostarsi su un branch:
+
+```sh
+git checkout <nome_branch>
+```
+
+Creare e spostarsi su un nuovo branch:
+
+```sh
+git checkout -b <nome_branch>
+```
+
+Unire un branch nel `master`:
+
+```sh
+git checkout master
+git merge <nome_branch>
+```
+
+Eliminare un branch:
+
+```sh
+git branch -d <nome_branch>
+```
+
+Forzare l'eliminazione di un branch non fuso:
+
+```sh
+git branch -D <nome_branch>
+```
+
+Pubblicare un nuovo branch:
+
+```sh
+git push origin <nome_branch>
+```
+
+Eliminare un branch remoto:
+
+```sh
+git push origin --delete <nome_branch>
+```
+
+---
+
+## Comandi principali di Git
+
+### Inizializzazione
+
+- `git init`: Inizializza un repository Git.
+- `git clone <URL>`: Clona un repository remoto.
+
+### Lavorare con i file
+
+- `git add <file>`: Aggiunge un file all'index.
+- `git commit -m "messaggio"`: Registra le modifiche.
+- `git rm <file>`: Rimuove un file dal repository.
+
+### Controllo dello stato
+
+- `git status`: Mostra lo stato dei file.
+- `git log`: Mostra la cronologia dei commit.
+- `git diff`: Mostra le differenze tra commit.
+
+### Sincronizzazione
+
+- `git pull origin <branch>`: Scarica le modifiche remote.
+- `git push origin <branch>`: Carica le modifiche sul server.
+
+### Gestione dei Branch
+
+- `git branch <nome>`: Crea un nuovo branch.
+- `git checkout <nome>`: Passa a un branch.
+- `git merge <branch>`: Unisce un branch al corrente.
+
+### Gestione dei Tag
+
+- `git tag -a <versione> -m "messaggio"`: Crea un tag.
+- `git push origin <tag>`: Pubblica un tag.
+
+Questa guida fornisce una panoramica completa su Git. Per approfondire, consulta la documentazione ufficiale: [git-scm.com](https://git-scm.com/doc).
