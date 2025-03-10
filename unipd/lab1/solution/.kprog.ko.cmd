@@ -1,0 +1,1 @@
+cmd_/home/debianos/C-Exercises/unipd/lab1/solution/kprog.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T arch/x86/module.lds -o /home/debianos/C-Exercises/unipd/lab1/solution/kprog.ko /home/debianos/C-Exercises/unipd/lab1/solution/kprog.o /home/debianos/C-Exercises/unipd/lab1/solution/kprog.mod.o;  true

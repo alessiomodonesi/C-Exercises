@@ -1,0 +1,1 @@
+cmd_/home/debianos/C-Exercises/unipd/lab1/solution/Module.symvers := sed 's/ko$$/o/' /home/debianos/C-Exercises/unipd/lab1/solution/modules.order | scripts/mod/modpost -m    -o /home/debianos/C-Exercises/unipd/lab1/solution/Module.symvers -e -i Module.symvers   -T -
