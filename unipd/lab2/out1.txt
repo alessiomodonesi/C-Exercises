@@ -1,10 +1,4 @@
-newproc1
-newproc1.c
-newproc2
-newproc2.c
-newproc3
-newproc3.c
-out1.txt
-out2.txt
-[parent] fork returned 1560
+[child] fork returned 0
+newproc1  newproc1.c  newproc2	newproc2.c  newproc3  newproc3.c  out1.txt  out2.txt
+[parent] fork returned 1587
 [parent] child has finished
