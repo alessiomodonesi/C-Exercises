@@ -1,0 +1,8 @@
+> ./newproc3
+  [child] res = 0
+  [child] current pid = 1628
+  [parent] res = 1628
+  [parent] current pid = 1627
+
+> ps -e | grep newproc3
+  1628 pts/0    00:00:38 newproc3
