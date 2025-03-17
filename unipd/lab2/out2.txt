@@ -1,0 +1,4 @@
+[child] res = 0
+[child] current pid = 1558
+[parent] res = 1558
+[parent] current pid = 1557
