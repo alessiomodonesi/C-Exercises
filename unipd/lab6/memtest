@@ -1,0 +1,3 @@
+#!/bin/bash
+echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid > /dev/null
+perf stat -e cache-misses,dTLB-load-misses,dTLB-store-misses,iTLB-load-misses,page-faults $1
