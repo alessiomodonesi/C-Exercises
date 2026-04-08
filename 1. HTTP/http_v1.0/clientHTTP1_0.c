@@ -94,6 +94,12 @@ int main()
         }
     }
 
+    char httpVersion[10];
+    int statusCode;
+    char statusPhrase[20];
+    sscanf(statusLine, "%s %d %s", httpVersion, &statusCode, statusPhrase); // prima specifico dove leggere, poi la formattazione della stringa
+
+    printf("status code: %d\n", statusCode);
     printf("number of headers read: %d\n", headerIndex);
 
     for (int i = 0; i < headerIndex - 1; i++)
@@ -102,8 +108,8 @@ int main()
     }
 
     printf("responseLine: %s\n", statusLine);
-    printf("body: %s\n", body);
-    printf("number of bytes in body: %d\n", byteBody);
+    // printf("body: %s\n", body);
+    printf("number of bytes in the body: %d\n", byteBody);
 
     int f = open("response.html", O_CREAT | O_WRONLY); // flag O_CREAT per creare il file se non esiste, flag O_WRONLY per aprire il file in scrittura
     write(f, body, byteBody);
