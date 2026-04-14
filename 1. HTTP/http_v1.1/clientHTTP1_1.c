@@ -29,7 +29,7 @@ int main()
 
     char *ip = (char *)&address.sin_addr.s_addr;
 
-    ip[0] = 104, ip[1] = 18, ip[2] = 27, ip[3] = 120;
+    ip[0] = 217, ip[1] = 61, ip[2] = 15, ip[3] = 222; // www.example.it
 
     int c = connect(sockfd, (struct sockaddr *)&address, sizeof(address));
 
@@ -44,33 +44,40 @@ int main()
     // su Linux è possibile inviare una richiesta HTTP con telnet, basta scrivere "telnet www.example.com 80" e
     // poi scrivere la richiesta HTTP (ad esempio "GET / HTTP/1.1\r\nHost:www.example.com\r\nConnection:keep-alive\r\n\r\n")
 
-    char buffer[] = "GET / HTTP/1.1\r\nHost:www.example.com\r\nConnection:keep-alive\r\n\r\n"; // ora in versione 1.1
+    // char buffer[] = "GET / HTTP/1.1\r\nHost:www.example.com\r\nConnection:keep-alive\r\n\r\n"; // ora in versione 1.1
     // Connection:close -> quando il server ha finito di inviare cose chiude la connessione (come nella 1.0)
     // Connection:keep-alive -> quando il server ha finito di inviare cose non chiude la connessione
     // ovviamente dopo l'inserimento di eventuali headers devo mettere CRLF CRLF
 
+    char buffer[] = "GET / HTTP/1.1\r\nHost:www.example.it\r\nConnection:keep-alive\r\n\r\n";
+
     int m = 0;
-    int writtenByte = 0;
-    while (writtenByte < strlen(buffer))
+    int bytesWritten = 0;
+    while (bytesWritten < strlen(buffer))
     {
-        m = write(sockfd, buffer + writtenByte, strlen(buffer) - writtenByte);
-        writtenByte += m;
+        m = write(sockfd, buffer + bytesWritten, strlen(buffer) - bytesWritten);
+        bytesWritten += m;
     }
 
-    //  printf("written %d bytes\n", writtenByte);
+    //  printf("written %d bytes\n", bytesWritten);
 
     char response[1000000];
 
     int n = 0;
-    int readByte = 0;
-    read(sockfd, response + readByte, sizeof(response) - readByte);
+    int bytesRead = 0;
+    while ((n = read(sockfd, response + bytesRead, 1)) > 0)
+    {
+        bytesRead += n;
+    }
+
+    // read(sockfd, response + bytesRead, sizeof(response) - bytesRead);
     /*
-        while ((n = read(sockfd, response + readByte, sizeof(response) - readByte)) > 0)
+        while ((n = read(sockfd, response + bytesRead, sizeof(response) - bytesRead)) > 0)
         {
             printf("%s", response);
             printf("read %d bytes\n", n);
-            readByte += n;
-            printf("total bytes read: %d\n", readByte);
+            bytesRead += n;
+            printf("total bytes read: %d\n", bytesRead);
         }
     */
 
@@ -79,7 +86,7 @@ int main()
     int readHeaderName = 0;
     int byteBody = 0;
 
-    for (int i = 0; i < readByte; i++)
+    for (int i = 0; i < bytesRead; i++)
     {
         // controllo se ho trovato la fine della status line (CRLF CRLF)
         // prima cerco il \n, se lo trovo controllo se prima c'è un \r, se c'è allora ho trovato la fine della status line
@@ -88,7 +95,7 @@ int main()
             if (response[i - 3] == 0)
             {
                 body = response + i + 1; // trovato il body
-                byteBody = readByte - (i + 1);
+                byteBody = bytesRead - (i + 1);
                 break;
             }
 
