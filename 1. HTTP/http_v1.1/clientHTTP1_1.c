@@ -125,7 +125,7 @@ int main()
     printf("numero di byte letti = %d\n", n);
     printf("la responseLine=%s\n", statusLine);
 
-    int f = open("response.html", O_CREAT | O_WRONLY, 0644); // flag O_CREAT per creare il file se non esiste, aggiunto permessi 0644 (Nota: nel tuo codice manca lo 0644 nella open, andrebbe aggiunto per compilare senza warning e settare i permessi correttamente)
+    int f = open("response.html", O_CREAT | O_WRONLY, 0644); // flag O_CREAT per creare il file se non esiste, aggiunto permessi 0644
 
     write(f, body, byteBody);
     // printf("il server dice:%s\n", response);
