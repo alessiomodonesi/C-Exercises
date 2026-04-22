@@ -143,8 +143,8 @@ int main()
                 if (chunkedFlag)
                 {
                     chunkedFlag = 0;
-                    chunkValue = body + n; // inizio del chunk successivo
                     n -= 2;
+                    chunkValue = body + n; // inizio del chunk successivo
                 }
                 else
                 {
@@ -158,6 +158,12 @@ int main()
                     n -= (strlen(chunkValue) + 2);
                     chunkedFlag = 1;
                     byteBody += chunkSize;
+
+                    int m = 0;
+                    while ((m += read(sockfd, body + n + m, 1)) > 0 && m < chunkSize)
+                    {
+                    }
+                    n += m;
                 }
             }
         }
@@ -169,6 +175,17 @@ int main()
         {
         }
     }
+
+    char trailer[1000];
+    n = 0;
+    while ((n += read(sockfd, trailer + n, 1)) > 0)
+    {
+        if (trailer[n - 1] == '\n' && trailer[n - 2] == '\r')
+        {
+            break;
+        }
+    }
+    printf("trailer size: %d\n", n);
 
     close(sockfd);
     printf("numero di byte letti = %d\n", n);
