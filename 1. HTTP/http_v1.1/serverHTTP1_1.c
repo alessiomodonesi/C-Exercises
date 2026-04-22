@@ -5,6 +5,18 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+
+void sendByte(int fd, char *buffer, int numeroByte)
+{
+    int m = 0;
+    int byteScritti = 0;
+    while (byteScritti < numeroByte)
+    {
+        m = write(fd, buffer + byteScritti, numeroByte - byteScritti);
+        byteScritti += m;
+    }
+}
 
 int main()
 {
@@ -39,49 +51,107 @@ int main()
         fflush(stdout);
     }
 
-    int l = listen(sockfd, 5);
+    int l = listen(sockfd, 5); // posso accettare 5 client in parallelo
 
     printf("il server è pronto per l'accept\n");
     fflush(stdout);
-    int clientSockId = accept(sockfd, NULL, NULL);
 
-    char buffer[10000];
-
-    printf("mi preparo a leggere\n");
-    fflush(stdout);
-    int n = 0;
-    int lettoNomeHeader = 0;
-    int byteLetti = 0;
-    int headerIndex = 0;
-    while ((n += read(clientSockId, buffer + n, 1)) > 0)
+    while (1)
     {
-        printf("%c", buffer[n - 1]);
-        if (buffer[n - 1] == '\n' && buffer[n - 2] == '\r')
+        int clientSockId = accept(sockfd, NULL, NULL);
+
+        int forkId = fork(); // creo un processo figlio per gestire la richiesta del client, così il processo padre può continuare ad accettare altre richieste
+        if (forkId == 0)     // entro nel processo figlio, gestisco la richiesta del client
         {
-            if (buffer[n - 4] == 0)
+            printf("accept effettuata\n");
+
+            char buffer[1024];
+
+            printf("mi preparo a leggere\n");
+            fflush(stdout);
+
+            int n = 0;
+            int lettoNomeHeader = 0;
+            int byteLetti = 0;
+            int headerIndex = 0;
+            while ((n += read(clientSockId, buffer + n, 1)) > 0)
             {
-                // body = buffer + byteLetti + 1;
-                break;
+                // printf("%c", buffer[n - 1]);
+                if (buffer[n - 1] == '\n' && buffer[n - 2] == '\r')
+                {
+                    if (buffer[n - 4] == 0)
+                    {
+                        // body = buffer + byteLetti + 1;
+                        break;
+                    }
+                    lettoNomeHeader = 0;
+                    buffer[n - 2] = 0;
+                    h[headerIndex].n = buffer + n;
+                }
+                else if (!lettoNomeHeader && buffer[n - 1] == ':')
+                {
+                    lettoNomeHeader = 1;
+                    buffer[n - 1] = 0;
+                    h[headerIndex++].v = buffer + n;
+                }
             }
-            lettoNomeHeader = 0;
-            buffer[byteLetti - 1] = 0;
-            h[headerIndex].n = buffer + byteLetti + 1;
-        }
-        else if (!lettoNomeHeader && buffer[byteLetti] == ':')
-        {
-            lettoNomeHeader = 1;
-            buffer[byteLetti] = 0;
-            h[headerIndex++].v = buffer + byteLetti + 1;
-        }
-    }
 
-    char response[] = "HTTP/1.1 200 OK\r\n\r\n<html><body>CIAO CLIENT!</body></html>";
+            printf("stampo gli headers\n");
+            for (int i = 0; i < headerIndex; i++)
+                printf("%s:%s\n", h[i].n, h[i].v);
 
-    int byteScritti = 0;
-    int m = 0;
-    while (byteScritti < strlen(response))
-    {
-        m = write(clientSockId, response + byteScritti, strlen(response) - byteScritti);
-        byteScritti += m;
+            char *requestLine = buffer; // GET /index.html HTTP/1.1
+            printf("request line: %s\n", requestLine);
+
+            char method[10], uri[100], version[10];
+            sscanf(requestLine, "%s %s %s", method, uri, version); // GET /index.html HTTP/1.1
+
+            // se il metodo è POST, PUT, DELETE, ecc, allora non è supportato > 405 Method Not Allowed
+            printf("method: %s\n", method);
+            printf("uri: %s\n", uri);
+            printf("version: %s\n", version);
+
+            // char response[1024] = "HTTP/1.1 200 OK\r\n\r\n<html><body>Hello client!</body></html>";
+            char response[1024] = "HTTP/1.1 200 OK\r\n\r\n";
+
+            if (strcmp(method, "GET") == 0) // accetto solo GET, se è un altro metodo allora 405 Method Not Allowed
+            {
+                if (strcmp(uri, "/") == 0)
+                    sprintf(uri, "/index.html");
+
+                int fd = open(uri + 1, O_RDONLY); // uri + 1 per saltare la barra iniziale
+
+                if (fd < 0)
+                {
+                    // chiamo la funzione definita sopra per inviare la risposta al client
+                    sendByte(clientSockId, response, strlen(response));
+                    sprintf(response, "HTTP/1.1 404 Not Found\r\n\r\n<html><body>File not found!</body></html>");
+                }
+                else
+                {
+                    sendByte(clientSockId, response, strlen(response));
+
+                    int m = 0;
+                    char bufferFile[1024];
+
+                    while ((m = read(fd, bufferFile, sizeof(bufferFile))) > 0)
+                    {
+                        sendByte(clientSockId, bufferFile, m);
+                    }
+                }
+
+                close(fd);
+            }
+            else
+            {
+                sendByte(clientSockId, response, strlen(response));
+                sprintf(response, "HTTP/1.1 405 Method Not Allowed\r\n\r\n");
+            }
+
+            close(clientSockId);
+            return 0;
+        }
+        else
+            close(clientSockId);
     }
 }
