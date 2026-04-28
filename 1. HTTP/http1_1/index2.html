@@ -1,0 +1,78 @@
+Università degli Studi di Padova
+
+             Dipartimento di Ingengeria Informatica
+
+            Prof. Nicola Zingirian Prof. Federico Botti
+
+                   Esame di Reti di Calcolatori
+
+                         18 Giugno 2025
+
+
+Si modifichi  il server  web in  modo che  riconosca tre  tipi di
+client che possono inviare richieste al server stesso:
+
+1. Un browser  Chrome eseguito da una macchina  remota (ossia il
+PC che avete in uso) 2.  Un browser Mozilla Firefox, eseguito da
+una macchina remota  3. Il browser testuale  "curl", eseguito in
+locale sullo stesso host del server (cioè il cloud)
+
+Il server deve poter riconoscere  automaticamente la tipologia di
+client che effettua la richiesta  e fornire una risposta coerente
+secondo  le  regole definite  sotto.
+
+
+Per attivare  il terzo  client (curl), si  può usare  il seguente
+comando da terminale (su cloud):
+
+    curl http://localhost:<PORT>/index.html
+
+Il numero  di port da  utilizzare al  quale mettere il  server in
+ascolto è contenuto nel file (nella vostra home):
+
+    port.txt
+
+Il server HTTP di partenza è quello sviluppato durante il corso e
+si trova nel file:
+
+    <matricola>.c
+
+(Nota:   sostituire  <matricola>   con  il   proprio  numero   di
+matricola.)
+
+Consegna: Modificare   il  server   HTTP  fornito  in   modo  da:
+implementare la seguente  logica di risposta in base  al tipo di:
+client                                                          :
+
+1. Se la  richiesta proviene da Chrome, il  server deve rifiutare
+la  richiesta  e  rispondere   con  un  errore  HTTP  appropriato
+per  indicare   che  il  tipo   di  client  non   è  accettabile.
+(trovare  il codice  adatto nella  sezione  15 della  rfc 9110  :
+https://www.rfc-editor.org/rfc/rfc9110#name-client-error-4xx )
+
+2. Se  la richiesta  proviene da un  browser Mozilla  Firefox, il
+server deve rispondere normalmente con codice 200 OK e fornire il
+contenuto del file  HTML richiesto, completo di tutti i  tag e la
+formattazione HTML.
+
+3.  Se la  richiesta  proviene da  curl  eseguito localmente,  il
+server  deve  rispondere con  codice  200  OK, ma  restituire  il
+contenuto del file HTML richiesto dopo aver rimosso completamente
+tutti i tag in formato <...>. Il risultato deve essere un file in
+testo puro, leggibile da terminale.
+
+Nota importante:  Ai fini  di questo esercizio  si assume  che il
+carattere '<' e il carattere '>' compaiano solo come delimitatori
+di tag  HTML e mai  all'interno di  stringhe o attributi  HTML. E'
+quindi sufficiente  rimuovere tutto il contenuto  compreso tra un
+carattere  '<' e  il  successivo carattere  '>'  per ottenere  la
+versione testuale del file.
+
+Specifiche:  -  Il   file  da  restituire  �   sempre  lo  stesso
+prova.html  si  presume  presente   nella  stessa  directory  del
+server.  - L'identificazione  del  tipo di  client deve  avvenire
+automaticamente  in   base  alle  informazioni   contenute  nella
+richiesta HTTP. Non sono ammesse modifiche manuali lato client. -
+Se il client non è riconoscibile o non rientra nei tre casi sopra
+descritti, il server  può rispondere con un  messaggio generico o
+con un errore.
