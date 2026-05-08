@@ -23,6 +23,7 @@ int main()
     if (s != 0)
     {
         perror("bind failed");
+        exit(1);
     }
     else
     {
@@ -51,5 +52,5 @@ int main()
         writedChars += writeCount;
     }
 
-    printf("Writed chars: %d\n", writeCount);
+    printf("Caratteri totali scritti: %d\n", writedChars);
 }
