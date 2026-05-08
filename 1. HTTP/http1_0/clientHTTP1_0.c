@@ -111,7 +111,7 @@ int main()
     // printf("body: %s\n", body);
     printf("number of bytes in the body: %d\n", byteBody);
 
-    int f = open("response.html", O_CREAT | O_WRONLY); // flag O_CREAT per creare il file se non esiste, flag O_WRONLY per aprire il file in scrittura
+    int f = open("response.html", O_CREAT | O_WRONLY, 0666); // flag O_CREAT per creare il file se non esiste, flag O_WRONLY per aprire il file in scrittura
     write(f, body, byteBody);
     close(f);
 
