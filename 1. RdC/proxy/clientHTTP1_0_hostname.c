@@ -5,9 +5,9 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <sys/stat.h>
-#include <netinet/in.h>
+#include <fcntl.h>
+#include <netdb.h>
 
 int main()
 {
@@ -26,7 +26,7 @@ int main()
     struct sockaddr_in address;
 
     address.sin_family = AF_INET;
-    address.sin_port = htons(80); // big endian di 8080 (network byte order)
+    address.sin_port = htons(80); // big endian di 80 (network byte order)
 
     char *ip = (char *)&address.sin_addr.s_addr;
     // ip[0] = 142, ip[1] = 251, ip[2] = 153, ip[3] = 119;
@@ -47,7 +47,7 @@ int main()
         exit(1);
     }
 
-    char buffer[] = "GET /imghp?hl=it&ogbl HTTP/1.0\r\n\r\n";
+    char buffer[] = "GET / HTTP/1.0\r\n\r\n";
 
     int m = 0;
     int writtenByte = 0;
@@ -57,7 +57,7 @@ int main()
         writtenByte += m;
     }
 
-    //  printf("written %d bytes\n", writtenByte);
+    printf("written %d bytes\n", writtenByte);
 
     char response[1000000];
 
@@ -113,9 +113,9 @@ int main()
         printf("header %s = %s\n", h[i].n, h[i].v); // stampo tutti gli header letti
     }
 
-    printf("responseLine: %s\n", statusLine);
-    // printf("body: %s\n", body);
     printf("number of bytes in the body: %d\n", byteBody);
+    // printf("body: %s\n", body);
+    printf("responseLine: %s\n", statusLine);
 
     int f = open("response.html", O_CREAT | O_WRONLY, 0666); // flag O_CREAT per creare il file se non esiste, flag O_WRONLY per aprire il file in scrittura
     write(f, body, byteBody);

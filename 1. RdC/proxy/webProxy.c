@@ -7,8 +7,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <netdb.h>
 
-void inviaByte(int fd, char *buffer, int numeroByte)
+int inviaByte(int fd, char *buffer, int numeroByte)
 {
     int byteScritti = 0;
     int m = 0;
@@ -17,6 +18,7 @@ void inviaByte(int fd, char *buffer, int numeroByte)
         m = write(fd, buffer + byteScritti, numeroByte - byteScritti);
         byteScritti += m;
     }
+    return byteScritti;
 }
 
 int main()
@@ -70,6 +72,7 @@ int main()
 
             printf("mi preparo a leggere\n");
             fflush(stdout);
+
             int n = 0;
             int lettoNomeHeader = 0;
             int byteLetti = 0;
@@ -150,8 +153,8 @@ int main()
                     }
                 }
 
-                printf("hostname: %s\n", hostname);
-                printf("uri: %s\n", new_uri);
+                printf("hostname = %s\n", hostname);
+                printf("uri = %s\n", new_uri);
 
                 int socket2 = socket(AF_INET, SOCK_STREAM, 0);
                 struct sockaddr_in address2;
@@ -165,13 +168,12 @@ int main()
                 int c = connect(socket2, (struct sockaddr *)&address2, sizeof(address2));
 
                 char request2[1000];
-                sprintf(request2, "GET %s HTTP/1.1\r\nHost: %s\r\n\r\n", hostname, hostname);
-
+                sprintf(request2, "GET %s HTTP/1.1\r\nHost:%s\r\n\r\n", hostname, hostname);
                 inviaByte(socket2, request2, strlen(request2));
 
                 char buffer2[10000];
                 int m = 0;
-                while (read(socket2, buffer2, sizeof(buffer2)) > 0)
+                while ((m = read(socket2, buffer2, sizeof(buffer2))) > 0)
                 {
                     inviaByte(clientSockId, buffer2, m);
                 }
@@ -209,12 +211,12 @@ int main()
                     {
                         waitpid(pid, NULL, 0);
                     }
+
                     // printf(response, "HTTP/1.1 404 Not Found\r\n\r\n<html>PAGINA NON TROVATA!</html");
                     // inviaByte(clientSockId, response, strlen(response));
                 }
                 else
                 {
-
                     int m = 0;
                     char bufferFile[1024];
 
