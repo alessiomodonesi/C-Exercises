@@ -200,6 +200,7 @@ int main()
                             printf("il valore della queryString = %s\n\n", queryString);
                             setenv("QUERY_STRING", queryString, 1);
                         }
+
                         dup2(clientSockId, 0); // stdin
                         dup2(clientSockId, 1); // stdout;
                         setenv("METHOD", "POST", 1);
