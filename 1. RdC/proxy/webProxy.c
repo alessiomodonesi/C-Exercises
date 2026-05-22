@@ -125,12 +125,21 @@ int main()
             printf("uri:%s\n", uri);
             printf("version:%s\n", version);
 
+            if (strcmp(method, "CONNECT") == 0)
+                printf("metodo = connect");
+            else
+                printf("metodo <> connect");
+
+            fflush(stdout);
+
             char response[1000] = "HTTP/1.1 200 OK\r\nTransfer-Encoding:chunked\r\n\r\n";
 
             if (strcmp(method, "GET") == 0)
             {
                 if (strcmp(uri, "/") == 0)
+                {
                     sprintf(uri, "/index.html");
+                }
 
                 int j = 0;
                 for (j; j < strlen(uri); j++)
@@ -138,17 +147,17 @@ int main()
                     if (j > 0 && uri[j] == '/' && uri[j - 1] == '/') // identificato "://"
                         break;
                 }
-
-                char *hostname;
-                char *new_uri = uri + j;
-
-                j = 0;
+                char *hostname = uri + j + 1;
+                char *new_uri;
+                new_uri = uri + j;
+                j++;
                 for (j; j < strlen(uri); j++)
                 {
                     if (j > 0 && uri[j] == '/')
                     {
-                        new_uri[j] = 0;
-                        hostname = new_uri + j + 1;
+                        uri[j] = 0;
+                        new_uri = uri + j + 1;
+
                         break;
                     }
                 }
@@ -166,12 +175,12 @@ int main()
                 address2.sin_addr.s_addr = *(unsigned int *)addr->h_addr;
 
                 int c = connect(socket2, (struct sockaddr *)&address2, sizeof(address2));
-
                 char request2[1000];
-                sprintf(request2, "GET %s HTTP/1.1\r\nHost:%s\r\n\r\n", hostname, hostname);
+                sprintf(request2, "GET /%s HTTP/1.1\r\nConnection:close\r\nHost:%s\r\n\r\n", new_uri, hostname);
+
                 inviaByte(socket2, request2, strlen(request2));
 
-                char buffer2[10000];
+                char buffer2[1000];
                 int m = 0;
                 while ((m = read(socket2, buffer2, sizeof(buffer2))) > 0)
                 {
@@ -227,6 +236,61 @@ int main()
 
                     printf("buffer Body:%s\n", bufferFile);
                     inviaByte(clientSockId, response, strlen(response));
+                }
+            }
+            else if (strcmp(method, "CONNECT") == 0)
+            {
+                printf("sono nella connect\n");
+                fflush(stdout);
+                char *port;
+                int j;
+                for (j = 0; uri[j] != ':'; j++)
+                {
+                }
+
+                uri[j] = 0;
+                port = uri + j + 1;
+
+                printf("address a cui connettersi:%s\n", uri);
+                int portInt = atoi(port);
+                printf("porta a cui connettersi:%d da stringa = %s\n", portInt, port);
+                fflush(stdout);
+
+                int socket2 = socket(AF_INET, SOCK_STREAM, 0);
+                struct sockaddr_in address2;
+
+                address2.sin_family = AF_INET;
+                address2.sin_port = htons(portInt); // big endian di 8080 (network byte order)
+
+                struct hostent *addr = gethostbyname(uri);
+                address2.sin_addr.s_addr = *(unsigned int *)addr->h_addr;
+
+                int c = connect(socket2, (struct sockaddr *)&address2, sizeof(address2));
+
+                char buffer2[1000];
+                sprintf(buffer2, "HTTP/1.1 200 Established\r\n\r\n");
+                inviaByte(clientSockId, buffer2, strlen(buffer2));
+
+                int fork2 = fork();
+
+                if (fork2 == 0)
+                {
+                    char bufferClient[1000];
+                    int m = 0;
+                    while ((m = read(socket2, bufferClient, sizeof(bufferClient))) > 0)
+                    {
+
+                        inviaByte(clientSockId, bufferClient, m);
+                    }
+                }
+                else
+                {
+                    char bufferClient[1000];
+                    int m = 0;
+                    while ((m = read(clientSockId, bufferClient, sizeof(bufferClient))) > 0)
+                    {
+                        inviaByte(socket2, bufferClient, m);
+                    }
                 }
             }
             else
