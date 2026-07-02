@@ -11,13 +11,13 @@
 #define NUM_THREADS 5
 
 /* the thread runs in this function */
-void *runner(void *param); 
+void *runner(void *param);
 
 int main(int argc, char *argv[])
 {
 	int i, policy;
-	pthread_t tid[NUM_THREADS]; 	/* the thread identifier */
-	pthread_attr_t attr; 		/* set of attributes for the thread */
+	pthread_t tid[NUM_THREADS]; /* the thread identifier */
+	pthread_attr_t attr;		/* set of attributes for the thread */
 
 	/* get the default attributes */
 	pthread_attr_init(&attr);
@@ -25,7 +25,8 @@ int main(int argc, char *argv[])
 	/* get the current scheduling policy */
 	if (pthread_attr_getschedpolicy(&attr, &policy) != 0)
 		fprintf(stderr, "Unable to get policy.\n");
-	else {
+	else
+	{
 		if (policy == SCHED_OTHER)
 			printf("SCHED_OTHER\n");
 		else if (policy == SCHED_RR)
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
 		else if (policy == SCHED_FIFO)
 			printf("SCHED_FIFO\n");
 	}
-	
+
 	if (pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED) != 0)
 		printf("Unable to set explicit scheduling policy\n");
 	/* set the scheduling policy - FIFO, RR, or OTHER */
@@ -41,23 +42,22 @@ int main(int argc, char *argv[])
 		printf("Unable to set desired scheduling policy to SCHED_OTHER\n");
 
 	/* create the threads */
-	for (i = 0; i < NUM_THREADS; i++) 
-		pthread_create(&tid[i], &attr, runner, NULL); 
+	for (i = 0; i < NUM_THREADS; i++)
+		pthread_create(&tid[i], &attr, runner, NULL);
 
 	/**
 	 * Now join on each thread
 	 */
-	for (i = 0; i < NUM_THREADS; i++) 
+	for (i = 0; i < NUM_THREADS; i++)
 		pthread_join(tid[i], NULL);
 }
-
 
 static int counter = 0;
 
 /**
  * The thread will begin control in this function.
  */
-void *runner(void *param) 
+void *runner(void *param)
 {
 	/* do some work ... */
 	printf("counter = %d\n", counter++);

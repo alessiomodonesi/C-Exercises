@@ -11,14 +11,14 @@ int simple_init(void)
   printk(KERN_INFO "Loading Kernel Module\n");
 
   /* Use inline assembly to get the value of the CS register */
-  asm("mov %%cs, %0" : "=r" (cs_register_value));
+  asm("mov %%cs, %0" : "=r"(cs_register_value));
   /* Extract the least significant 2 bits to determine the privilege level */
   privilege_level = cs_register_value & 0x03;
 
   if (privilege_level == 0)
-      printk(KERN_INFO "Running in Kernel Mode\n");
+    printk(KERN_INFO "Running in Kernel Mode\n");
   else
-      printk(KERN_INFO "Running in User Mode\n");
+    printk(KERN_INFO "Running in User Mode\n");
 
   return 0;
 }

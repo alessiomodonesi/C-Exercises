@@ -1,12 +1,16 @@
 /**
- * SO Lab 3 - Task 1
+ * SO Lab 4 - Task 1
  */
 
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
 
-int sum; /* this data is shared by the threads */
+long sum; /* this data is shared by the threads */
+bool flag[2];
+int turn;
 
 void *runner1(void *param); /* first thread */
 void *runner2(void *param); /* second thread */
@@ -20,6 +24,9 @@ int main(int argc, char *argv[])
   pthread_attr_init(&attr);
 
   sum = 0;
+  flag[0] = true;
+  flag[1] = true;
+  turn = 0;
 
   /* create the threads */
   pthread_create(&tid1, &attr, runner1, argv[1]);
@@ -37,12 +44,21 @@ int main(int argc, char *argv[])
  */
 void *runner1(void *param)
 {
-  int i, upper = atol(param);
+  long i, upper = atol(param);
 
   if (upper > 0)
   {
     for (i = 1; i <= upper; i++)
-      sum++; /* increase the shared variable */
+    {
+      flag[0] = true;
+      turn = 1;
+      while (flag[1] && turn == 1)
+        usleep(1); /* wait */
+      /***** critical section *****/
+      sum++;
+      /***** end of critical section ****/
+      flag[0] = false;
+    }
   }
 
   pthread_exit(0);
@@ -53,12 +69,21 @@ void *runner1(void *param)
  */
 void *runner2(void *param)
 {
-  int i, upper = atol(param);
+  long i, upper = atol(param);
 
   if (upper > 0)
   {
     for (i = 1; i <= upper; i++)
-      sum--; /* decrease the shared variable */
+    {
+      flag[1] = true;
+      turn = 0;
+      while (flag[0] && turn == 0)
+        ; /* wait */
+      /***** critical section *****/
+      sum--;
+      /***** end of critical section ****/
+      flag[1] = false;
+    }
   }
 
   pthread_exit(0);

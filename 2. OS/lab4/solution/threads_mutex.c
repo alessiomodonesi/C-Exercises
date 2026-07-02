@@ -1,12 +1,14 @@
 /**
- * SO Lab 3 - Task 1
+ * SO Lab 4 - Task 3
  */
 
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-int sum; /* this data is shared by the threads */
+long sum; /* this data is shared by the threads */
+
+pthread_mutex_t lock;
 
 void *runner1(void *param); /* first thread */
 void *runner2(void *param); /* second thread */
@@ -18,6 +20,7 @@ int main(int argc, char *argv[])
 
   /* default attributes */
   pthread_attr_init(&attr);
+  pthread_mutex_init(&lock, NULL);
 
   sum = 0;
 
@@ -37,12 +40,16 @@ int main(int argc, char *argv[])
  */
 void *runner1(void *param)
 {
-  int i, upper = atol(param);
+  long i, upper = atol(param);
 
   if (upper > 0)
   {
     for (i = 1; i <= upper; i++)
+    {
+      pthread_mutex_lock(&lock);
       sum++; /* increase the shared variable */
+      pthread_mutex_unlock(&lock);
+    }
   }
 
   pthread_exit(0);
@@ -53,12 +60,16 @@ void *runner1(void *param)
  */
 void *runner2(void *param)
 {
-  int i, upper = atol(param);
+  long i, upper = atol(param);
 
   if (upper > 0)
   {
     for (i = 1; i <= upper; i++)
+    {
+      pthread_mutex_lock(&lock);
       sum--; /* decrease the shared variable */
+      pthread_mutex_unlock(&lock);
+    }
   }
 
   pthread_exit(0);

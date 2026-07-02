@@ -14,22 +14,25 @@ int main()
 	/* fork a child process */
 	pid = fork();
 
-	if (pid < 0) { /* error occurred */
+	if (pid < 0)
+	{ /* error occurred */
 		fprintf(stderr, "fork failed\n");
 		return 1;
 	}
-	else if (pid == 0) { /* child process */
-		printf("[child] fork returned %d\n",pid);
+	else if (pid == 0)
+	{ /* child process */
+		printf("[child] fork returned %d\n", pid);
 		/* child will load and execute a different program*/
-		execlp("/bin/ls","ls",NULL);
+		execlp("/bin/ls", "ls", NULL);
 	}
-	else { /* parent process */
+	else
+	{				   /* parent process */
 		usleep(10000); /* wait 10 ms */
-		printf("[parent] fork returned %d\n",pid);
+		printf("[parent] fork returned %d\n", pid);
 		/* parent will wait for the child to complete */
 		wait(NULL);
 		printf("[parent] child has finished\n");
 	}
-    
-    return 0;
+
+	return 0;
 }

@@ -23,13 +23,15 @@ int main()
   {                                                 /* child process */
     printf("[child] res = %d\n", res);              /* value returned by fork() */
     printf("[child] current pid = %d\n", getpid()); /* current process' pid */
+    while (1)
+      ;
   }
   else
   {                                                  /* parent process */
     usleep(10000);                                   /* wait 10 ms */
     printf("[parent] res = %d\n", res);              /* value returned by fork() */
     printf("[parent] current pid = %d\n", getpid()); /* current process' pid */
-    wait(NULL);                                      /* wait for child to complete... */
+    // wait(NULL); /* wait for child to complete... */
   }
 
   return 0;
