@@ -1,0 +1,42 @@
+                Universita' degli Studi di Padova
+
+               Dipartimento di Ingengeria Informatica
+
+            Prof. Nicola Zingirian Prof. Federico Botti
+
+              PROVA DI LABORATORIO RETI DI CALCOLATORI
+
+                          04 FEBBRAIO 2026
+
+
+Modificare il programma web client HTTP/1.1 <matricola>.c che si trova
+nella vostra home in modo che si comporti come segue. Il client deve:
+
+1.  inviare una richiesta verso una risorsa HTTP/1.1
+2.  determinare la lunghezza totale dell’entity body
+3.  verificare il supporto alle range requests tramite Accept-Ranges
+    (RFC 2616, 14.5).
+4.  suddividere logicamente l’entity body in tre intervalli di byte
+    consecutivi che coprano l’intero contenuto.
+5.  inviare tre richieste GET consecutive con header Range (RFC 2616,
+    14.35), ciascuna per uno degli intervalli calcolati.
+6.  interpretare le risposte alle richieste parziali, includendo lo
+    status 206 (RFC 2616, 10.2.7) e l’header Content-Range (RFC 2616,
+    14.16).
+7.  ricostruire localmente l’entity body completo a partire dalle tre
+    porzioni ricevute.
+
+
+Effettuare la richiesta a http://www.example.com/ per fare il test del
+vostro client (il client è già predisposto per collegarsi a quel sito).
+
+Output minimo richiesto stampato su console:
+
+  a)  lunghezza dell'entity body rilevato
+  b)  presenza/assenza di Accept-Ranges
+  c)  intervalli richiesti (Range)
+  d)  status code ricevuti
+  e)  dimensione finale del contenuto ricostruito
+  f)  stampa del contenuto aggregato
+
+TESTO DI RIFERIMENTO: https://www.rfc-editor.org/rfc/rfc2616.html

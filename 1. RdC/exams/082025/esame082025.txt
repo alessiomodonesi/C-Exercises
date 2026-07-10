@@ -1,0 +1,70 @@
+A lezione è stato presentato un proxy HTTP didattico finalizzato a gestire solo 
+le richieste con absolute-URI e funziona come un proxy normale, non trasparen-
+te detto anche "forward proxy".
+In questo  compito si richiede di estenderlo in modo che si comporti anche come
+un "reverse proxy".
+
+Un reverse proxy riceve le richieste HTTP dai client al posto del server web di
+destinazione  e le  instrada a web  server locali detti "server di backend". Il 
+reverse proxy e i backend girano spesso sulla stessa macchina, 
+ 
+I client in questo caso non sono configurati per usare un proxy forward, quindi 
+inviano normali richieste con relative-URI ad esempio:
+
+    GET /index.html HTTP/1.1
+    Host: www.sito1.com
+
+Il reverse proxy legge l'header Host, individua il sito corretto tra piÃ¹ domini
+virtuali e inoltra la richiesta al backend corrispondente.
+
+--------------------------------------------------------------------------------
+                                     COMPITO
+--------------------------------------------------------------------------------
+
+Sapendo che 
+
+1. Il file /etc/hosts è già  stato configurato in modo che i nomi "www.sito1.com"
+   e "www.sito2.com" vengano risolti con l'indirizzo IP della macchina cloud.
+
+2. Sono attivi due web server che rispondono rispettivamente ai port 8888 e 8889
+   all'indirizzo locale 127.0.0.1 e serviranno come server di "backend"
+
+Procedere come segue: 
+
+1. Modificare il proxy HTTP didattico <numero di matricola>.c  in modo che:
+   - risponda alla porta  nel file port.txt (copiate la porta dal file a mano);
+   - legga l'header Host delle richieste;
+   - utilizzi una tabella statica di mapping nome host -> port di backend, imple-
+     mentata come un array di struct inizializzata nel codice sorgente (non deve 
+     leggere file di configurazione);
+   - inoltri la richiesta a "www.sito1.com" al backend 127.0.0.1:8888
+   - inoltri la richiesta a "www.sito2.com" al backend 127.0.0.1:8889;
+   - risponda con "502 Bad Gateway" per host non presenti in tabella.
+
+2. Dimostrare il funzionamento:
+
+       avvio del client web in linea (un modo pratico per fare una richiesta web)
+
+            curl http://www.sito1.com:<porta_proxy>/
+
+       e poi
+            curl http://www.sito2.com:<porta_proxy>/
+
+   Se il proxy funziona correttamente le risposte saranno diverse perchè i due 
+   server risponderanno rispettivamente: "sono www.sito1.it" e "sono www.sito2.it"
+ 
+--------------------------------------------------------------------------------
+SCHEMA DELLE COMPONENTI
+--------------------------------------------------------------------------------
+
+           +---------+        +----------------+        +----------------+
+           | Client  | -----> |  Reverse Proxy | -----> | Backend sito 1 |
+           | curl    |        |  (porta_proxy) |        | 127.0.0.1:8888 |
+           +---------+        +----------------+        +----------------+
+                                        |               +----------------+
+                                        +-------------> | Backend sito 2 |
+                                                        | 127.0.0.1:8889 |
+                                                        +----------------+
+
+NOTA BENE: il Client, il Proxy, e i 2 Server di Backend girano tutti sulla stessa
+macchina cloud.

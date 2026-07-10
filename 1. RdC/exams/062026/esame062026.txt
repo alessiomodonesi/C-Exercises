@@ -1,0 +1,32 @@
+Si vuole modificare il programma web server HTTP/1.1 introducendo un controllo di accesso alle risorse protette che utilizzi gli header Referer e Sec-Fetch-Site.
+
+Questo controllo riduce il rischio di attacchi Cross-Site Request Forgery (CSRF), nei quali un sito malevolo induce il browser di un utente autenticato a inviare richieste verso un altro sito sfruttando la sessione già aperta. L'obiettivo è consentire l'accesso alle risorse protette soltanto quando la richiesta proviene da domini esplicitamente autorizzati oppure è riconosciuta dal browser come appartenente allo stesso sito.
+
+Categorie di Risorse
+Il server distingue tre categorie di risorse:
+
+Pubbliche: accessibili senza limitazioni (ad esempio "/index.html"). Devono continuare ad essere restituite normalmente.
+
+Protette: il cui accesso deve essere autorizzato (ad esempio "/private.html").
+
+Inesistenti: risorse non presenti sul server.
+
+Logica di Validazione per le Risorse Protette
+Per le risorse protette, il server dispone di una lista di domini autorizzati (ad esempio: partner1.com). Quando viene richiesta una risorsa protetta, il server deve seguire questi passaggi di verifica:
+
+Verifica del Referer: Il server deve innanzitutto verificare se la richiesta contiene l'header Referer. Se tale header è presente e il dominio contenuto nell'URL appartiene alla lista dei domini trusted, la richiesta deve essere considerata autorizzata.
+
+Verifica del Sec-Fetch-Site: Qualora il Referer sia assente, malformato oppure faccia riferimento ad un dominio non presente nella lista dei domini trusted, il server deve utilizzare l'header Sec-Fetch-Site per stabilire la relazione tra il sito di provenienza della richiesta e quello che ospita la risorsa.
+
+Richieste accettate: classificate come "same-origin" oppure "same-site".
+
+Richieste rifiutate: classificate come "cross-site" o "none". Anche in assenza dell'header Sec-Fetch-Site la richiesta deve essere considerata non autorizzata.
+
+Gestione delle Risposte di Errore
+Risorsa Non Autorizzata
+Se la richiesta a una risorsa protetta fallisce i controlli precedenti, il server deve produrre la risposta:
+HTTP/1.1 403 Forbidden (Nota: il testo originale riportava "403 Not Forbidden", che è un refuso comune per "403 Forbidden")
+
+Risorsa Inesistente
+Se invece la risorsa richiesta non esiste, il server deve rispondere con:
+HTTP/1.1 404 Not Found

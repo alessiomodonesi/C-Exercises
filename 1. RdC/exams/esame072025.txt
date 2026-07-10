@@ -1,0 +1,74 @@
+                  Universita' degli Studi di Padova
+
+              Dipartimento di Ingengeria dell'Informazione
+
+              Prof. Nicola Zingirian Prof. Federico Botti
+
+                     Esame di Reti di Calcolatori
+
+                            4 Luglio 2025
+
+                         ORA CONSEGNA :  12.55
+
+Modificare il programma di web server TCP realizzato a lezione, il cui
+nome sorgente  corrisponde alla  propria matricola (es.  123456.c), in
+modo che:
+
+1. Il server ascolti sulla  porta indicata nel file porta.txt (copiata
+e cablata nel codice, non letta a runtime dal file).
+
+2. Il server gestisca un cookie di identificazione utente nel formato:
+
+   user=utente<indice>
+
+   dove <indice> e' un progressivo che viene incrementato: 1,2,3 etc
+
+3. Alla prima richiesta senza cookie da parte di un client:
+
+   - Il server assegna un nuovo identificatore user=utente<indice> con
+Max-Age=60 secondi, utilizzando l'header Set-Cookie (RFC 6265, v. link
+piu' sotto)
+
+   - Registra l'utente in memoria con un contatore di accessi iniziale
+pari a 0.
+
+4. Alle richieste successive, provenienti dal browser, con header:
+
+   Cookie: user=utente<indice>
+
+   - Il contatore associato a quell'<indice> viene incrementato.
+
+   - Il valore  aggiornato  viene  incluso  nel  corpo della  risposta
+   all'inizio dell'Entity Body,  nella forma
+
+             "<html><br> Numero accessi:  X <br>"
+
+   dove X e' il valore del contatore.
+
+5. Il contatore deve essere indipendente per ciascun utente.
+
+Riferimento standard:
+
+ RFC 6265 - HTTP State Management Mechanism
+ Sezione 4.1 – Syntax and Semantics of the Set-Cookie Header Field
+ https://datatracker.ietf.org/doc/html/rfc6265#section-4.1
+
+Test richiesto:
+
+- Aprire  una finestra normale  del browser  e visitare il  server: il
+contatore deve aumentare a ogni refresh.
+
+-  Aprire una  finestra in  modalita' incognita  e visitare  lo stesso
+server: il contatore deve partire da 1 e aumentare indipendentemente.
+
+- I due contatori devono progredire separatamente.
+
+=================================================================
+Per consegnare lasciare il file sorgente <matricola>.c nella pro-
+pria  home  insieme  a un commento (nelle righe iniziali del sor-
+gente precedute da // ) che descrive  il  funzionamento  del  tuo
+programma e come hai implementato le modifiche richieste.
+
+Per  ritirarsi scrivrere nella prima riga del programma //RITIRA-
+TO.
+
