@@ -160,7 +160,6 @@ int main()
                         char *queryString = NULL;
                         int i;
                         // Cerco la presenza di parametri nell'URL dopo il '?' (es. /cgi-bin/test?name=val)
-                        // Cerco la presenza di parametri nell'URL dopo il '?'
                         for (i = 0; uri[i] != 0 && uri[i] != '?'; i++)
                         {
                         }
