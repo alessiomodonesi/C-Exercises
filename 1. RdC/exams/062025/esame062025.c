@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+// DA VEDERE!
+
 /*
  * Funzione di utilità per garantire l'invio completo di un buffer di byte su un socket.
  * La chiamata di sistema write() standard potrebbe non trasmettere tutti i byte richiesti

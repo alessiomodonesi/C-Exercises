@@ -8,6 +8,8 @@
 #include <fcntl.h>
 #include <netdb.h>
 
+// VISTO DAGLI APPUNTI
+
 /*
  * Funzione ausiliaria per garantire l'invio completo di un buffer su un socket.
  * Gestisce eventuali scritture parziali effettuando un ciclo finché tutti
@@ -65,7 +67,7 @@ int main()
 
     struct sockaddr_in address;
     address.sin_family = AF_INET;
-    
+
     /*
      * NOTA SULLA PORTA DEL PROXY (Requisito d'Esame):
      * Il testo d'esame specifica di inserire nel codice la porta letta a mano dal file "port.txt".
@@ -93,7 +95,7 @@ int main()
 
     printf("il server è pronto per l'accept");
     fflush(stdout);
-    
+
     // Loop principale del server proxy
     while (1)
     {
@@ -114,11 +116,11 @@ int main()
             int lettoNomeHeader = 1; // Inizializzato a 1 per non dividere la Request Line (che non contiene il carattere ':')
             int byteLetti = 0;
             int headerIndex = 0;
-            
+
             /*
              * PARSING DEGLI HEADERS DELLA RICHIESTA HTTP:
              * Legge la richiesta dal socket client byte per byte.
-             * 
+             *
              * I separatori ':' e '\r' vengono sostituiti con '\0' per isolare le stringhe
              * corrispondenti a nomi e valori degli header all'interno di 'buffer'.
              */
@@ -132,14 +134,14 @@ int main()
                     {
                         break;
                     }
-                    lettoNomeHeader = 0; // Dalla riga successiva (che sarà un header) cerchiamo il carattere ':'
-                    buffer[n - 2] = 0;   // Sostituisce '\r' con '\0'
+                    lettoNomeHeader = 0;           // Dalla riga successiva (che sarà un header) cerchiamo il carattere ':'
+                    buffer[n - 2] = 0;             // Sostituisce '\r' con '\0'
                     h[headerIndex].n = buffer + n; // Imposta il puntatore al nome del prossimo header
                 }
                 else if (!lettoNomeHeader && buffer[n - 1] == ':')
                 {
                     lettoNomeHeader = 1;
-                    buffer[n - 1] = 0; // Sostituisce ':' con '\0' per separare il nome del campo dal valore
+                    buffer[n - 1] = 0;               // Sostituisce ':' con '\0' per separare il nome del campo dal valore
                     h[headerIndex++].v = buffer + n; // Salva l'inizio del valore dell'header
                 }
             }
@@ -147,14 +149,14 @@ int main()
             char *contentLengthValue;
             int contentLength = 0;
             printf("stampo gli headers");
-            
+
             // Scansione degli header estratti per cercare "Content-Length" e "Host"
             for (int i = 0; i < headerIndex; i++)
             {
                 if (strcmp(h[i].n, "Content-Length") == 0)
                 {
                     sscanf(h[i].v, "%d", &contentLength);
-                    
+
                     /*
                      * NOTA SULLA GESTIONE DEGLI SPAZI:
                      * Poiché h[i].v punta subito dopo il carattere ':', contiene uno spazio iniziale
@@ -209,12 +211,12 @@ int main()
                 {
                     // sprintf(uri, "/index.html");
                 }
-                
+
                 // Creazione del socket verso il server di backend
                 int socket2 = socket(AF_INET, SOCK_STREAM, 0);
                 struct sockaddr_in address2;
                 short int portaBackend = 0;
-                
+
                 // REQUISITO D'ESAME: Identificazione del backend basandosi sull'header Host
                 for (int i = 0; i < 2; i++)
                 {
@@ -232,7 +234,7 @@ int main()
                     inviaByte(clientSockId, responseBadGateway, strlen(responseBadGateway));
                     exit(0); // Termina il processo figlio
                 }
-                
+
                 // Configurazione dell'indirizzo di connessione del backend
                 address2.sin_family = AF_INET;
                 address2.sin_port = htons(portaBackend);
@@ -242,7 +244,7 @@ int main()
                 /*
                  * IMPOSTAZIONE MANUALE DELL'IP DI BACKEND (127.0.0.1):
                  * Poiché i backend girano localmente, l'indirizzo IP viene forzato a 127.0.0.1.
-                 * Viene fatto effettuando il cast a puntatore a char dell'indirizzo IPv4 ed 
+                 * Viene fatto effettuando il cast a puntatore a char dell'indirizzo IPv4 ed
                  * impostando singolarmente i 4 byte dell'IP.
                  */
                 char *ip = (char *)&address2.sin_addr.s_addr;
@@ -253,7 +255,7 @@ int main()
 
                 // Connessione fisica al server di backend
                 int c = connect(socket2, (struct sockaddr *)&address2, sizeof(address2));
-                
+
                 // Preparazione e invio della richiesta HTTP riformattata al backend
                 char request2[1000];
                 sprintf(request2, "GET %s HTTP/1.1\r\nConnection:close\r\nHost:%s\r\n\r\n", uri, headerHost);
@@ -262,7 +264,7 @@ int main()
 
                 char buffer2[1000];
                 int m = 0;
-                
+
                 /*
                  * NOTA E ATTENZIONE (INNEFFICIENZA/BUG NEL CODICE ORIGINALE):
                  * La condizione di lettura contiene una valutazione logica:
@@ -304,7 +306,7 @@ int main()
                             printf("il valore della queryString = %s\n\n", queryString);
                             setenv("QUERY_STRING", queryString, 1); // Imposta la variabile d'ambiente QUERY_STRING
                         }
-                        
+
                         // Redirezione di standard input e standard output sul socket del client
                         dup2(clientSockId, 0); // stdin
                         dup2(clientSockId, 1); // stdout;

@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+// DA VEDERE!
+
 /*
  * Funzione ausiliaria per garantire l'invio completo di un buffer di byte.
  * La write() di sistema potrebbe scrivere meno byte di quelli richiesti (scrittura parziale).
