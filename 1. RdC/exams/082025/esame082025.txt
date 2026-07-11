@@ -14,7 +14,7 @@ inviano normali richieste con relative-URI ad esempio:
     GET /index.html HTTP/1.1
     Host: www.sito1.com
 
-Il reverse proxy legge l'header Host, individua il sito corretto tra piÃ¹ domini
+Il reverse proxy legge l'header Host, individua il sito corretto tra più domini
 virtuali e inoltra la richiesta al backend corrispondente.
 
 --------------------------------------------------------------------------------
