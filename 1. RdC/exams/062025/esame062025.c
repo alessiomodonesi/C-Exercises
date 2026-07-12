@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-// DA VEDERE!
+// VISTO DAGLI APPUNTI
 
 /*
  * Funzione di utilità per garantire l'invio completo di un buffer di byte su un socket.
@@ -244,7 +244,7 @@ int main()
                                 if (bufferFile[0] == '<')
                                 {
                                     tagAperturaLetto = 1; // Inizio del tag HTML
-                                    continue;
+                                    continue;             // salta alla prossima iterazione del while
                                 }
                                 else if (tagAperturaLetto == 1 && bufferFile[0] != '>')
                                 {
