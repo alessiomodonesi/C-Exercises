@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-// DA VEDERE!
+// VISTO
 
 /*
  * Funzione ausiliaria per garantire l'invio completo di un buffer di byte.
