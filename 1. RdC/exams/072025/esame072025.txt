@@ -69,6 +69,6 @@ pria  home  insieme  a un commento (nelle righe iniziali del sor-
 gente precedute da // ) che descrive  il  funzionamento  del  tuo
 programma e come hai implementato le modifiche richieste.
 
-Per  ritirarsi scrivrere nella prima riga del programma //RITIRA-
+Per  ritirarsi scrivere nella prima riga del programma //RITIRA-
 TO.
 
