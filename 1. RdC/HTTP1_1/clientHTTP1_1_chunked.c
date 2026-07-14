@@ -155,21 +155,34 @@ int main()
         // Leggo la risposta un byte alla volta per identificare i confini dei chunk
         while ((n += read(sockfd, body + n, 1)) > 0)
         {
-            // I chunk sono delimitati da CRLF
+            // I chunk sono delimitati da CRLF (\r\n)
             if (body[n - 1] == '\n' && body[n - 2] == '\r')
             {
-                body[n - 2] = 0; // Temporaneamente chiudo la stringa per leggerla con sscanf
+                body[n - 2] = 0; // Temporaneamente chiudo la stringa sostituendo '\r' con 0 per leggerla con sscanf
 
                 if (chunkedFlag)
                 {
-                    // Abbiamo appena finito di leggere il contenuto di un chunk (CRLF finale del chunk)
+                    // =================================================================
+                    // FASE 3: GESTIONE DEL CRLF DI CHIUSURA DEL CHUNK
+                    // Abbiamo appena finito di leggere il contenuto di un chunk (e il suo CRLF finale)
+                    // =================================================================
                     chunkedFlag = 0;
-                    n -= 2;                // Rimuovo i caratteri CRLF dal conteggio dei dati utili
-                    chunkValue = body + n; // Il prossimo valore sarà la dimensione del prossimo chunk
+
+                    // SOVRASCRITTURA 2: Sotto-decrementiamo 'n' di 2 posizioni per "scartare" il \r\n appena letto.
+                    // In questo modo, i dati del prossimo chunk (o la sua dimensione) andranno a
+                    // sovrascrivere questo CRLF di cortesia inviato dal server.
+                    n -= 2;
+
+                    // Spostiamo il puntatore 'chunkValue' alla fine dei dati utili appena letti.
+                    // È qui che ci aspettiamo di leggere la stringa esadecimale del prossimo chunk.
+                    chunkValue = body + n;
                 }
                 else
                 {
-                    // Abbiamo appena letto la dimensione del prossimo chunk in esadecimale
+                    // =================================================================
+                    // FASE 1: LETTURA DELLA DIMENSIONE DEL CHUNK
+                    // Abbiamo appena letto la dimensione del prossimo chunk in esadecimale (es: "5\r\n")
+                    // =================================================================
                     sscanf(chunkValue, "%x", &chunkSize); // leggo il numero di byte del chunk in esadecimale
                     printf("valore del chunk = %d = 0x%x\n", chunkSize, chunkSize);
 
@@ -177,17 +190,28 @@ int main()
                     if (chunkSize == 0)
                         break;
 
-                    fflush(stdout);                // svuoto il buffer dello std output
-                    n -= (strlen(chunkValue) + 2); // Sovrascrivo la stringa della dimensione con i dati reali
-                    chunkedFlag = 1;
-                    byteBody += chunkSize; // Aggiorno la dimensione totale del body
+                    fflush(stdout); // svuoto il buffer dello std output
 
+                    // SOVRASCRITTURA 1: Portiamo indietro il cursore di scrittura 'n'.
+                    // Sottraiamo la lunghezza della stringa esadecimale (es. "5") + i 2 byte di \r\n.
+                    // In questo modo, i dati reali del chunk che leggeremo tra poco andranno a
+                    // sovrascrivere in memoria la stringa con la dimensione esadecimale.
+                    n -= (strlen(chunkValue) + 2);
+
+                    chunkedFlag = 1;
+                    byteBody += chunkSize; // Aggiorno la dimensione totale del body (sommando solo i dati puliti)
+
+                    // =================================================================
+                    // FASE 2: LETTURA DEI DATI REALI DEL CHUNK
                     // Leggo esattamente chunkSize byte di dati del chunk
+                    // =================================================================
                     int m = 0;
+                    // I dati vengono letti e memorizzati a partire dal nuovo indirizzo 'body + n' (quello riportato indietro).
+                    // Questo permette l'effettiva sovrascrittura dei metadati del chunk.
                     while ((m += read(sockfd, body + n + m, 1)) > 0 && m < chunkSize)
                     {
                     }
-                    n += m;
+                    n += m; // Riportiamo avanti 'n' del numero effettivo di byte utili letti
                 }
             }
         }
