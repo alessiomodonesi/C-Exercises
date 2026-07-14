@@ -106,13 +106,13 @@ int main()
                 break;
             }
 
-            readHeaderName = 0; // Ripristina il flag per l'header successivo
+            readHeaderName = 0;                  // Ripristina il flag per l'header successivo
             response[i - 1] = '\0';              // metto il terminatore di stringa al posto del '\r'
             h[headerIndex].n = response + i + 1; // salvato su h[0] il nome dell'header
         }
         else if (!readHeaderName && response[i] == ':')
         {
-            readHeaderName = 1; // Passa alla lettura del valore dell'header
+            readHeaderName = 1;                    // Passa alla lettura del valore dell'header
             response[i] = '\0';                    // metto il terminatore di stringa al posto del ':'
             h[headerIndex++].v = response + i + 1; // salvato su h[0] il valore dell'header
         }

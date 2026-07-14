@@ -113,15 +113,15 @@ int main()
                         // body = buffer + byteLetti + 1;
                         break;
                     }
-                    lettoNomeHeader = 0; // Ripristina il flag per la riga successiva
-                    buffer[n - 2] = 0;   // Sostituisce il '\r' con un terminatore '\0'
+                    lettoNomeHeader = 0;           // Ripristina il flag per la riga successiva
+                    buffer[n - 2] = 0;             // Sostituisce il '\r' con un terminatore '\0'
                     h[headerIndex].n = buffer + n; // Imposta il puntatore al nome dell'header successivo
                 }
                 // Rilevamento del separatore ':' per dividere nome e valore dell'header
                 else if (!lettoNomeHeader && buffer[n - 1] == ':')
                 {
-                    lettoNomeHeader = 1; // Stiamo per leggere il valore dell'header
-                    buffer[n - 1] = 0;   // Sostituisce il ':' con un terminatore '\0'
+                    lettoNomeHeader = 1;             // Stiamo per leggere il valore dell'header
+                    buffer[n - 1] = 0;               // Sostituisce il ':' con un terminatore '\0'
                     h[headerIndex++].v = buffer + n; // Imposta il puntatore al valore e incrementa l'indice degli header
                 }
             }
@@ -129,7 +129,7 @@ int main()
             char *contentLengthValue;
             int contentLength = 0;
             printf("stampo gli headers");
-            
+
             // Scansione degli header estratti per individuare il Content-Length (necessario per le richieste POST)
             for (int i = 0; i < headerIndex; i++)
             {
@@ -164,6 +164,10 @@ int main()
             char response[1000] = "HTTP/1.1 200 OK\r\nTransfer-Encoding:chunked\r\n\r\n";
 
             // --- CASO 1: GESTIONE DEL METODO HTTP GET ---
+            // DIFFERENZA DAL SERVER CLASSICO:
+            // Invece di cercare un file locale sul proprio disco fisso, il proxy interpreta
+            // l'URI per estrarre l'hostname remoto, vi si connette via socket, inoltra la richiesta
+            // e ridirige la risposta indietro al client.
             if (strcmp(method, "GET") == 0)
             {
                 // Se l'URI è la root, imposta il file di default
@@ -172,7 +176,9 @@ int main()
                     sprintf(uri, "/index.html");
                 }
 
-                // Ricerca del separatore "://" nell'URI per estrarre l'hostname
+                // [DIFFERENZA] Identificazione del separatore "://" nell'URI.
+                // Un proxy riceve spesso URI assoluti (es. http://www.google.com/index.html)
+                // mentre un web server classico riceve di norma solo percorsi relativi (es. /index.html).
                 int j = 0;
                 for (j; j < strlen(uri); j++)
                 {
@@ -183,13 +189,14 @@ int main()
                 char *new_uri;
                 new_uri = uri + j;
                 j++;
-                
-                // Ricerca della prima barra '/' dopo l'hostname per separarlo dal percorso della risorsa
+
+                // [DIFFERENZA] Parsing per separare l'hostname reale dal path della risorsa richiesta.
+                // Es: "www.esempio.com/percorso/file.html" -> hostname: "www.esempio.com", new_uri: "percorso/file.html"
                 for (j; j < strlen(uri); j++)
                 {
                     if (j > 0 && uri[j] == '/')
                     {
-                        uri[j] = 0; // Termina la stringa dell'hostname
+                        uri[j] = 0;            // Termina la stringa dell'hostname
                         new_uri = uri + j + 1; // Il nuovo URI relativo inizia dopo la barra '/'
 
                         break;
@@ -199,28 +206,33 @@ int main()
                 printf("hostname = %s\n", hostname);
                 printf("uri = %s\n", new_uri);
 
-                // Creazione del socket per connettersi al server remoto di destinazione
+                // [DIFFERENZA] Creazione di un client socket (socket2).
+                // Un server classico non effettua connessioni outbound (in uscita) verso altri server web.
                 int socket2 = socket(AF_INET, SOCK_STREAM, 0);
                 struct sockaddr_in address2;
 
                 address2.sin_family = AF_INET;
-                address2.sin_port = htons(80); // Porta HTTP standard
+                address2.sin_port = htons(80); // Porta HTTP standard per il server di destinazione
 
-                // Risoluzione DNS dell'hostname remoto
+                // [DIFFERENZA] Risoluzione DNS dell'hostname remoto.
+                // Il server classico risponde solo sul proprio IP; il proxy deve risolvere l'IP di terzi.
                 struct hostent *addr = gethostbyname(hostname);
                 address2.sin_addr.s_addr = *(unsigned int *)addr->h_addr;
 
-                // Connessione al server di destinazione
+                // [DIFFERENZA] Connessione attiva (connect) verso il server remoto di destinazione.
                 int c = connect(socket2, (struct sockaddr *)&address2, sizeof(address2));
                 char request2[1000];
-                
-                // Costruzione della nuova richiesta HTTP/1.1 da inviare al server remoto
+
+                // [DIFFERENZA] Riformulazione della richiesta HTTP/1.1 da inoltrare.
+                // Viene specificato esplicitamente l'header "Host" con il target remoto.
                 sprintf(request2, "GET /%s HTTP/1.1\r\nConnection:close\r\nHost:%s\r\n\r\n", new_uri, hostname);
 
-                // Invio della richiesta al server remoto
+                // [DIFFERENZA] Invio della richiesta appena ricostruita al server remoto.
                 inviaByte(socket2, request2, strlen(request2));
 
-                // Lettura della risposta dal server remoto e reinvio immediato (inoltro) al client originario
+                // [DIFFERENZA] Ponte di inoltro (Relay Loop):
+                // Legge la risposta proveniente dal server remoto (socket2) e la scrive
+                // direttamente sul socket del client originario (clientSockId) in tempo reale.
                 char buffer2[1000];
                 int m = 0;
                 while ((m = read(socket2, buffer2, sizeof(buffer2))) > 0)
@@ -235,7 +247,7 @@ int main()
                 if (memcmp(uri, "/cgi-bin", 8) == 0)
                 {
                     int pid = fork(); // Fork per eseguire lo script CGI in isolamento
-                    if (pid == 0) // Processo figlio CGI
+                    if (pid == 0)     // Processo figlio CGI
                     {
                         char *queryString = NULL;
 
@@ -258,14 +270,14 @@ int main()
                         // Redirezione di standard input e standard output sul socket del client
                         dup2(clientSockId, 0); // stdin associato al socket (per leggere il corpo del POST)
                         dup2(clientSockId, 1); // stdout associato al socket (per scrivere la risposta direttamente al client)
-                        
+
                         // Impostazione delle variabili d'ambiente per il protocollo CGI
                         setenv("METHOD", "POST", 1);
                         setenv("ContentLength", contentLengthValue, 1);
-                        
+
                         // Scrittura dell'header di risposta HTTP standard prima di eseguire lo script
                         printf("HTTP/1.1 200 OK\r\n\r\n");
-                        
+
                         // Esecuzione dello script CGI specificato nell'URI (uri+1 rimuove la barra '/' iniziale)
                         execv(uri + 1, NULL);
                     }
@@ -294,19 +306,24 @@ int main()
                 }
             }
             // --- CASO 3: GESTIONE DEL METODO HTTP CONNECT (Tunneling SSL/TLS HTTPS) ---
+            // DIFFERENZA DAL SERVER CLASSICO:
+            // Questa è una funzionalità esclusiva dei Proxy Server (HTTP Tunneling).
+            // Un server web classico non implementa CONNECT. Serve a stabilire una connessione TCP
+            // cieca e bidirezionale diretta tra il client e un server sicuro (es. porta 443 HTTPS),
+            // senza che il proxy possa o debba decifrare il traffico (TLS/SSL).
             else if (strcmp(method, "CONNECT") == 0)
             {
                 printf("sono nella connect\n");
                 fflush(stdout);
                 char *port;
                 int j;
-                
-                // Separazione di indirizzo e porta dall'URI (formato: host:porta)
+
+                // [DIFFERENZA] Estrazione di indirizzo e porta dall'URI di destinazione (formato host:porta, es. google.com:443)
                 for (j = 0; uri[j] != ':'; j++)
                 {
                 }
 
-                uri[j] = 0; // Termina la stringa dell'hostname
+                uri[j] = 0;         // Termina la stringa dell'hostname
                 port = uri + j + 1; // Punta alla stringa contenente la porta
 
                 printf("address a cui connettersi:%s\n", uri);
@@ -314,29 +331,32 @@ int main()
                 printf("porta a cui connettersi:%d da stringa = %s\n", portInt, port);
                 fflush(stdout);
 
-                // Creazione del socket per il server di destinazione finale del tunnel
+                // [DIFFERENZA] Creazione del socket verso il server sicuro di destinazione.
                 int socket2 = socket(AF_INET, SOCK_STREAM, 0);
                 struct sockaddr_in address2;
 
                 address2.sin_family = AF_INET;
-                address2.sin_port = htons(portInt); // Porta di destinazione in Network Byte Order
+                address2.sin_port = htons(portInt); // Porta di destinazione finale (solitamente 443)
 
-                // Risoluzione DNS dell'indirizzo finale
+                // [DIFFERENZA] Risoluzione DNS dell'host di destinazione sicura.
                 struct hostent *addr = gethostbyname(uri);
                 address2.sin_addr.s_addr = *(unsigned int *)addr->h_addr;
 
-                // Connessione al server di destinazione
+                // [DIFFERENZA] Connessione TCP al server remoto sicuro.
                 int c = connect(socket2, (struct sockaddr *)&address2, sizeof(address2));
 
-                // Risposta al client per confermare l'apertura del tunnel TCP
+                // [DIFFERENZA] Il proxy invia al client lo stato "HTTP/1.1 200 Established".
+                // Questo comunica al client che il canale TCP fisico è stato aperto con successo
+                // e che da questo momento in poi può iniziare a trasmettere pacchetti SSL/TLS cifrati.
                 char buffer2[1000];
                 sprintf(buffer2, "HTTP/1.1 200 Established\r\n\r\n");
                 inviaByte(clientSockId, buffer2, strlen(buffer2));
 
-                // Fork per la gestione bidirezionale del traffico dati (Tunneling)
+                // [DIFFERENZA] Fork per sdoppiare il flusso di rete e permettere una comunicazione Full-Duplex.
+                // Il proxy non interpreta più i dati come HTTP, ma si limita a fare un relay a livello di trasporto (TCP).
                 int fork2 = fork();
 
-                if (fork2 == 0) // Processo figlio del tunnel: inoltro da Destinazione a Client
+                if (fork2 == 0) // Processo figlio del tunnel: inoltro da Destinazione Remota a Client
                 {
                     char bufferClient[1000];
                     int m = 0;
@@ -345,7 +365,7 @@ int main()
                         inviaByte(clientSockId, bufferClient, m);
                     }
                 }
-                else // Processo padre del tunnel: inoltro da Client a Destinazione
+                else // Processo padre del tunnel: inoltro da Client a Destinazione Remota
                 {
                     char bufferClient[1000];
                     int m = 0;
