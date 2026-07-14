@@ -8,7 +8,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-// SVOLTO DA SOLO
+// IMPLEMENTAZIONE: Modificato il client web HTTP/1.1 per supportare le richieste parziali (Range Requests)
+// 1. Invia una richiesta HEAD per determinare la lunghezza dell'entity body tramite Content-Length.
+// 2. Verifica il supporto del server alle range requests tramite la presenza dell'header Accept-Ranges.
+// 3. Divide l'entity body in 3 intervalli consecutivi e invia 3 richieste GET consecutive con header "Range: bytes=start-end".
+// 4. Gestisce le risposte con stato 206 Partial Content e analizza l'header Content-Range.
+// 5. Ricostruisce localmente l'entity body completo aggregando nel buffer finale le 3 porzioni ricevute.
 
 /**
  * Client HTTP/1.1 che gestisce risposte con codifica "Transfer-Encoding:

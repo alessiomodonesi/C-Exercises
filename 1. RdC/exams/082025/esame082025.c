@@ -8,7 +8,12 @@
 #include <fcntl.h>
 #include <netdb.h>
 
-// VISTO DAGLI APPUNTI
+// IMPLEMENTAZIONE: Esteso il forward proxy didattico per funzionare come Reverse Proxy:
+// 1. Il proxy ascolta sulla porta statica indicata nel file port.txt [cite: 34] ed esamina l'header "Host" delle richieste in arrivo.
+// 2. Utilizza una tabella di mapping statica (array di struct) per instradare le richieste ai rispettivi backend:
+//    - "www.sito1.com" viene inoltrato al backend locale 127.0.0.1:8888.
+//    - "www.sito2.com" viene inoltrato al backend locale 127.0.0.1:8889.
+// 3. Se l'host non è presente nella tabella di mapping, il proxy risponde direttamente al client con "502 Bad Gateway".
 
 /*
  * Funzione ausiliaria per garantire l'invio completo di un buffer su un socket.

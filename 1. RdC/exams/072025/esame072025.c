@@ -7,7 +7,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-// SVOLTO DA SOLO
+// IMPLEMENTAZIONE: Modificato il server web per gestire in memoria sessioni utente indipendenti tramite cookie:
+// 1. Alla prima richiesta senza cookie, assegna un identificativo "user=utente<indice>" (con Max-Age=60s) tramite Set-Cookie.
+// 2. Registra l'utente in memoria inizializzando a 0 un contatore di accessi dedicato.
+// 3. Alle richieste successive contenenti l'header "Cookie", incrementa il contatore specifico di quell'utente.
+// 4. Inserisce il valore del contatore aggiornato all'inizio dell'Entity Body della risposta HTTP nel formato richiesto.
 
 /**
  * Funzione di utilità per garantire l'invio di tutti i byte richiesti.
@@ -29,13 +33,15 @@ void sendByte(int fd, char *buffer, int numeroByte)
 int main()
 {
 	// Struttura per memorizzare gli header della richiesta
-	struct header {
+	struct header
+	{
 		char *n;
 		char *v;
 	};
 
 	// Struct per tenere traccia dello stato globale
-	struct ServerState {
+	struct ServerState
+	{
 		int last_index;
 		int user_access[1000]; // array dove l'indice corrisponde all'ID utente
 	};
@@ -54,7 +60,7 @@ int main()
 
 	struct sockaddr_in address;
 	address.sin_family = AF_INET;
-	address.sin_port = htons(8080);       // Il server ascolta sulla porta 8080
+	address.sin_port = htons(8080);		  // Il server ascolta sulla porta 8080
 	address.sin_addr.s_addr = INADDR_ANY; // Accetta connessioni da qualsiasi interfaccia di rete
 
 	// Associazione del socket all'indirizzo e alla porta configurati
@@ -109,14 +115,14 @@ int main()
 					break;
 				}
 				lettoNomeHeader = 0;
-				buffer[n - 2] = 0;             // Termino la stringa del valore dell'header precedente
+				buffer[n - 2] = 0;			   // Termino la stringa del valore dell'header precedente
 				h[headerIndex].n = buffer + n; // Inizio potenziale del prossimo nome header
 			}
 			// Identificazione del separatore ':' tra nome e valore dell'header
 			else if (!lettoNomeHeader && buffer[n - 1] == ':')
 			{
 				lettoNomeHeader = 1;
-				buffer[n - 1] = 0;               // Termino la stringa del nome dell'header
+				buffer[n - 1] = 0;				 // Termino la stringa del nome dell'header
 				h[headerIndex++].v = buffer + n; // Inizio del valore dell'header
 			}
 		}
@@ -132,8 +138,10 @@ int main()
 			if (strcmp(h[i].n, "Content-Length") == 0)
 				sscanf(h[i].v, "%d", &contentLength);
 
-			if (strcmp(h[i].n, "Cookie") == 0) {
-				if (sscanf(h[i].v, " user=utente%d", &user_index) == 1) {
+			if (strcmp(h[i].n, "Cookie") == 0)
+			{
+				if (sscanf(h[i].v, " user=utente%d", &user_index) == 1)
+				{
 					new_user = 0; // utente registrato trovato
 					printf("%s:%s\n", h[i].n, h[i].v);
 				}
@@ -142,11 +150,13 @@ int main()
 			// printf("%s:%s\n", h[i].n, h[i].v);
 		}
 
-		if (new_user == 1) { // nuovo utente
+		if (new_user == 1)
+		{ // nuovo utente
 			state.last_index++;
-			user_index = state.last_index; // assegno un nuovo ID
+			user_index = state.last_index;	   // assegno un nuovo ID
 			state.user_access[user_index] = 1; // inizializzo gli accessi
-		} else // utente registrato
+		}
+		else								 // utente registrato
 			state.user_access[user_index]++; // incremento gli accessi
 
 		printf("DEBUG - Utente %d, numero accessi: %d\n", user_index, state.user_access[user_index]);
@@ -167,7 +177,7 @@ int main()
 
 		// --- GESTIONE METODO GET ---
 		if (strcmp(method, "GET") == 0) // Gestione del metodo GET
-		{	
+		{
 			if (new_user == 1) // nuovo utente
 				sprintf(response, "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nSet-Cookie: user=utente%d; Max-Age=60\r\n\r\n", user_index);
 			else
@@ -205,9 +215,9 @@ int main()
 				sprintf(chunkHeader, "%x\r\n", (unsigned int)strlen(html_accessi));
 
 				// Invia il chunk artificiale
-				sendByte(clientSockId, chunkHeader, (int)strlen(chunkHeader)); // dimensione del chunk
+				sendByte(clientSockId, chunkHeader, (int)strlen(chunkHeader));	 // dimensione del chunk
 				sendByte(clientSockId, html_accessi, (int)strlen(html_accessi)); // corpo del chunk
-				sendByte(clientSockId, "\r\n", 2); // fine chunk
+				sendByte(clientSockId, "\r\n", 2);								 // fine chunk
 
 				// Lettura del file e invio a blocchi (chunks)
 				// Leggo il file e lo invio a blocchi (chunk) secondo lo standard HTTP/1.1
@@ -218,8 +228,8 @@ int main()
 					sprintf(chunkSize, "%x\r\n", m); // Scrivo la dimensione del chunk in esadecimale seguita da \r\n
 
 					sendByte(clientSockId, chunkSize, (int)strlen(chunkSize)); // Invio dimensione chunk
-					sendByte(clientSockId, bufferFile, m);                     // Invio contenuto chunk
-					sendByte(clientSockId, "\r\n", 2);                         // Ogni chunk termina con CRLF
+					sendByte(clientSockId, bufferFile, m);					   // Invio contenuto chunk
+					sendByte(clientSockId, "\r\n", 2);						   // Ogni chunk termina con CRLF
 				}
 
 				// Invio del chunk finale di dimensione 0 per terminare la risposta chunked
@@ -230,7 +240,8 @@ int main()
 			close(fd);
 		}
 		// --- METODO NON SUPPORTATO ---
-		else {
+		else
+		{
 			sprintf(response, "HTTP/1.1 405 Method Not Allowed\r\n\r\n");
 
 			// Chiamo la funzione definita sopra per inviare la risposta di errore al client

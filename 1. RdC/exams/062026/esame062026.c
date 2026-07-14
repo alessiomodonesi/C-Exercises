@@ -7,7 +7,11 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-// VISTO
+// IMPLEMENTAZIONE: Modificato il server per proteggere le risorse private contro attacchi CSRF:
+// 1. Le risorse pubbliche (es. /index.html) continuano ad essere servite liberamente.
+// 2. Per le risorse protette (es. /private.html), il server verifica l'header Referer rispetto a una lista di domini trusted.
+// 3. Se il Referer manca o non è trusted, verifica l'header Sec-Fetch-Site autorizzando solo "same-origin" o "same-site".
+// 4. In caso di fallimento dei controlli risponde con "403 Forbidden", mentre risponde con "404 Not Found" se la risorsa non esiste.
 
 /*
  * Funzione ausiliaria per garantire l'invio completo di un buffer di byte.

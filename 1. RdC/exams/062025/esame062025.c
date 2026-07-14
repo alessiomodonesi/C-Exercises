@@ -7,7 +7,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-// VISTO DAGLI APPUNTI
+// IMPLEMENTAZIONE: Modificato il server web per identificare automaticamente tre tipi di client:
+// 1. Client Chrome (remoto): identificato tramite User-Agent; il server risponde con un errore 4xx appropriato (es. 406 Not Acceptable).
+// 2. Client Firefox (remoto): identificato tramite User-Agent; il server risponde normalmente (200 OK) inviando il file prova.html intatto.
+// 3. Client curl (locale su cloud): identificato per provenienza da localhost; il server risponde con 200 OK ma rimuove tutti i tag <...> dal file HTML prima di inviarlo.
 
 /*
  * Funzione di utilità per garantire l'invio completo di un buffer di byte su un socket.
