@@ -1,0 +1,78 @@
+                 Universita' degli Studi di Padova
+
+               Dipartimento di Ingengeria Informatica
+
+            Prof. Nicola Zingirian Prof. Federico Botti
+
+              PROVA DI LABORATORIO RETI DI CALCOLATORI
+
+                          14 LUGLIO 2026
+
+
+Modificare  il  programma  web proxy HTTP/1.1 <matricola>.c che si trova nella
+vostra home in modo che si comporti come segue.
+
+HEADER FORWARED
+===============
+Nella richiesta HTTP generata verso il server remoto, il proxy deve aggiungere
+l'header "Forwarded", come definito nella RFC 7239.
+
+L'header deve  contenere esclusivamente il parametro "for", il cui valore deve
+identificare l'indirizzo IP del client che ha originato la richiesta.
+Non e' richiesto implementare gli altri parametri previsti dalla RFC 7239.
+La sintassi dell'header deve essere conforme alla RFC 7239. (v. RIFERIMENTI)
+
+GESTIONE DEGLI ERRORI DI CONNESSIONE
+====================================
+
+Il proxy  deve  rilevare  gli errori che si verificano durante il  tentativo di
+connessione TCP verso il server remoto.
+Se il  tentativo di connessione  fallisce a causa di  un timeout, il proxy deve
+restituire al client una risposta HTTP avente codice di stato 504.
+Per  qualunque altro  errore  di  connessione, il  proxy  deve  restituir e una
+risposta HTTP avente codice di stato 502.
+Entrambe le risposte devono essere  HTTP correttamente formate  e contenere una
+breve pagina HTML che descriva l'errore.
+La sintassi delle risposte deve essere conforme alla RFC 9110 (v. RIFERIMENTI)
+
+VERIFICA
+========
+Il  programma   verra'  verificato  utilizzando  un   browser  configurato  per
+utilizzare il proxy.
+
+Per verificare gli header trasmessi utilizzare l'URL
+http://httpbingo.org/dump/request
+
+Per collegarsi:
+
+- ad una destinazione che provoca un errore immediato di connessione utilizzare
+http://li695-84.members.linode.com:200
+
+- ad una destinazione che provoca un timeout della connessione utilizzare
+http://li695-84.members.linode.com:19200
+
+COMMENTI
+========
+
+Il programma deve  contenere nelle  prime righe  dell'intestazione  in forma di
+commenti /* */ l'indicazione  dei punti di intervento sul codice e le modifiche
+necessarie per farlo funzionare.
+
+RIFERIMENTI
+===========
+
+RFC 7239 - Forwarded HTTP Extension
+   https://datatracker.ietf.org/doc/html/rfc7239#section-4
+   https://datatracker.ietf.org/doc/html/rfc7239#section-5.2
+
+RFC 9110 - HTTP Semantics
+   https://datatracker.ietf.org/doc/html/rfc9110#section-15.6
+   https://datatracker.ietf.org/doc/html/rfc9110#section-15.6.3
+   https://datatracker.ietf.org/doc/html/rfc9110#section-15.6.5
+
+
+CONSEGNA
+========
+Per consegnare lasciare  il file sorgente assegnato, mantenendo invariato il
+nome del file <matricola>.c
+Il programma dovra' compilare senza errori ed eseguire le logiche richieste.
